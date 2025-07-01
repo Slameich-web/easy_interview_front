@@ -4,6 +4,8 @@ import "./index.css";
 import App from "./App.tsx";
 import { initializeApp } from "firebase/app";
 import { BrowserRouter } from "react-router-dom";
+import { store } from "./store.ts";
+import { Provider } from "react-redux";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -21,7 +23,9 @@ console.log(app);
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>
   </StrictMode>
 );
