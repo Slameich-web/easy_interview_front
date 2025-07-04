@@ -1,15 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./features/user/store/slice";
+import authReducer from "../features/auth/model/authSlice";
 
 export const store = configureStore({
   reducer: {
-    user: userReducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['user/setUser'],
-        ignoredPaths: ['user.token'],
+        ignoredActions: ['auth/setUser'],
+        ignoredPaths: ['auth.token'],
       },
     }),
 });
