@@ -1,4 +1,9 @@
 .Form {
   display: flex;
   flex-direction: column;
+  gap: 16px;
+  max-width: 400px;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

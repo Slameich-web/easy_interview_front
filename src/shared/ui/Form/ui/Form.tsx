@@ -3,36 +3,59 @@ import styles from "./Form.module.scss";
 import { useState } from "react";
 import Input from "../../Input";
 import Button from "../../Button";
+import { ErrorMessage } from "../../ErrorMessage";
+import { LoadingSpinner } from "../../LoadingSpinner";
 
 interface FormProps {
   title: string;
-  handleClick: (email: string, password: string) => void;
+  handleClick: (email: string, password: string) => Promise<void>;
   buttonTitle: string;
+  isLoading?: boolean;
+  error?: string;
 }
 
-const Form = ({ title, handleClick, buttonTitle }: FormProps) => {
+const Form = ({ title, handleClick, buttonTitle, isLoading = false, error }: FormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || !password.trim()) return;
+    
+    await handleClick(email, password);
+  };
+
   return (
-    <div className={styles.Form}>
+    <form className={styles.Form} onSubmit={handleSubmit}>
       <Typography variant="h2">{title}</Typography>
+      
+      {error && <ErrorMessage message={error} sx={{ mb: 2 }} />}
+      
       <Input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="email"
+        placeholder="Email"
+        required
+        disabled={isLoading}
       />
       <Input
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
+        placeholder="Пароль"
+        required
+        disabled={isLoading}
       />
-      <Button onClick={() => handleClick(email, password)}>
-        {buttonTitle}
+      
+      <Button 
+        type="submit" 
+        disabled={isLoading || !email.trim() || !password.trim()}
+        sx={{ position: 'relative' }}
+      >
+        {isLoading ? <LoadingSpinner size={20} /> : buttonTitle}
       </Button>
-    </div>
+    </form>
   );
 };
 
