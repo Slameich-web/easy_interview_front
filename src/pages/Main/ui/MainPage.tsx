@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Typography, Box, CardContent } from "@mui/material";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { LogoutButton } from "../../../features/auth";
@@ -14,13 +12,6 @@ import Button from "../../../shared/ui/Button";
 
 const MainPage = () => {
   const { isAuth, email } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isAuth) {
-      navigate("/login");
-    }
-  }, [isAuth, navigate]);
 
   if (!isAuth) {
     return (

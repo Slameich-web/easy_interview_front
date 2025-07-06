@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { setUser } from "./features/auth";
+import ProtectedRoute from "./shared/utils/ProtectedRoute";
+import PublicRoute from "./shared/utils/PublicRoute";
 
 function App() {
   const auth = getAuth();
@@ -23,16 +25,19 @@ function App() {
             id: user.uid,
           })
         );
-        navigate("/");
       }
     });
   }, [auth, dispatch, navigate]);
   return (
     <div className={styles.App}>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/" element={<MainPage />} />
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<MainPage />} />
+        </Route>
       </Routes>
     </div>
   );

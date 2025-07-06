@@ -181,6 +181,7 @@ const Form = ({
     <Box display="flex" justifyContent="center" alignItems="center" p={2.5}>
       <FormCard>
         <Box
+          style={{ minWidth: "360px" }}
           component="form"
           onSubmit={handleSubmit}
           display="flex"
