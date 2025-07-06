@@ -57,7 +57,7 @@ const FormCard = styled(Card)({
   maxWidth: "450px",
   padding: "48px 40px",
   background:
-    "linear-gradient(145deg, #667eea 0%,rgb(109, 45, 173) 50%,rgb(117, 137, 250) 100%)",
+    "linear-gradient(145deg, #667eea 0%,rgb(67, 20, 114) 50%,rgb(117, 137, 250) 100%)",
   boxShadow: `
     0 25px 50px rgba(102, 126, 234, 0.25),
     0 10px 30px rgba(118, 75, 162, 0.15),

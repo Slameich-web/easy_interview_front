@@ -4,6 +4,8 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   User,
+  setPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 
 export interface AuthCredentials {
@@ -14,13 +16,15 @@ export interface AuthCredentials {
 export interface AuthResult {
   user: User;
 }
+const auth = getAuth();
+
+setPersistence(auth, browserLocalPersistence);
 
 export const signIn = async ({
   email,
   password,
 }: AuthCredentials): Promise<AuthResult> => {
   try {
-    const auth = getAuth();
     const result = await signInWithEmailAndPassword(auth, email, password);
     return { user: result.user };
   } catch (error) {
@@ -35,7 +39,6 @@ export const signUp = async ({
   password,
 }: AuthCredentials): Promise<AuthResult> => {
   try {
-    const auth = getAuth();
     const result = await createUserWithEmailAndPassword(auth, email, password);
     return { user: result.user };
   } catch (error) {
@@ -47,7 +50,6 @@ export const signUp = async ({
 
 export const logout = async (): Promise<void> => {
   try {
-    const auth = getAuth();
     await signOut(auth);
   } catch (error) {
     throw new Error(

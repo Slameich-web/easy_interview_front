@@ -122,7 +122,13 @@ const MainPage = () => {
           </Typography>
         </Box>
 
-        <Grid container spacing={4} sx={{ mb: 8 }}>
+        <Grid
+          container
+          display="flex"
+          justifyContent="center"
+          spacing={4}
+          sx={{ mb: 8 }}
+        >
           {features.map((feature, index) => (
             <Grid key={index} sx={{ mb: 4 }}>
               <Card
