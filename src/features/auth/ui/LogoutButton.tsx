@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { LoadingSpinner } from "../../../shared/ui/LoadingSpinner";
+import { IconButton } from "../../../shared/ui/IconButton";
 import { removeUser } from "../model/authSlice";
 import { logout } from "../api/authApi";
+import { Box, Typography } from "@mui/material";
 
 interface LogoutButtonProps {
   userEmail?: string | null;
@@ -26,53 +28,35 @@ export const LogoutButton = ({ userEmail }: LogoutButtonProps) => {
   };
 
   return (
-    <button 
+    <IconButton 
       onClick={handleLogout}
       disabled={isLoggingOut}
-      style={{
-        padding: '12px 24px',
-        border: '2px solid rgba(255, 255, 255, 0.3)',
-        borderRadius: '16px',
-        background: 'rgba(255, 255, 255, 0.1)',
-        color: '#ffffff',
-        fontSize: '14px',
-        fontWeight: '600',
-        cursor: isLoggingOut ? 'not-allowed' : 'pointer',
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-        backdropFilter: 'blur(10px)',
-        textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-        letterSpacing: '0.5px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
+      sx={{
+        px: 3,
+        py: 1.5,
         minWidth: '120px',
-        justifyContent: 'center'
-      }}
-      onMouseEnter={(e) => {
-        if (!isLoggingOut) {
-          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
-          e.currentTarget.style.transform = 'translateY(-2px)';
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!isLoggingOut) {
-          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-          e.currentTarget.style.transform = 'translateY(0)';
-        }
+        fontSize: '14px',
+        fontWeight: 600,
+        letterSpacing: '0.5px',
+        textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
       }}
     >
-      {isLoggingOut ? (
-        <>
-          <LoadingSpinner size={16} />
-          Выход...
-        </>
-      ) : (
-        <>
-          🚪 Выйти
-        </>
-      )}
-    </button>
+      <Box display="flex" alignItems="center" gap={1}>
+        {isLoggingOut ? (
+          <>
+            <LoadingSpinner size={16} />
+            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+              Выход...
+            </Typography>
+          </>
+        ) : (
+          <>
+            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+              🚪 Выйти
+            </Typography>
+          </>
+        )}
+      </Box>
+    </IconButton>
   );
 };
