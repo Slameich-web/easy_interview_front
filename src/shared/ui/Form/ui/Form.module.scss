@@ -1,26 +1,30 @@
 .FormContainer {
   width: 100%;
-  max-width: 420px;
+  max-width: 450px; /* Увеличил ширину для лучшего вида */
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
 }
 
 .Form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
   width: 100%;
-  padding: 40px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 48px 40px;
+  border-radius: 20px;
+  /* Яркий градиентный фон вместо серого */
+  background: linear-gradient(145deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  box-shadow: 
+    0 25px 50px rgba(102, 126, 234, 0.25),
+    0 10px 30px rgba(118, 75, 162, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  /* Убираем фиксированную высоту для адаптивности */
-  min-height: auto;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px);
 }
 
 .Form::before {
@@ -30,30 +34,51 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  border-radius: 16px;
+  background: linear-gradient(145deg, 
+    rgba(255, 255, 255, 0.15) 0%, 
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.1) 100%);
+  border-radius: 20px;
   z-index: -1;
 }
 
+.Form::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: shimmer 3s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes shimmer {
+  0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.3; }
+  50% { transform: rotate(180deg) scale(1.1); opacity: 0.1; }
+}
+
 .FormTitle {
-  color: #2c3e50;
+  color: #ffffff;
   text-align: center;
   font-weight: 700;
-  margin-bottom: 8px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   flex-shrink: 0;
+  font-size: 2rem;
+  letter-spacing: 0.5px;
 }
 
 .FormContent {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  /* Убираем flex-grow для естественного размера */
+  gap: 24px;
 }
 
 .InputWrapper {
   position: relative;
-  min-height: 56px; /* Уменьшаем минимальную высоту */
+  min-height: 72px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -61,23 +86,27 @@
 
 .InputField {
   width: 100%;
-  padding: 16px 20px;
-  border: 2px solid rgba(44, 62, 80, 0.1);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.8);
+  padding: 18px 24px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.95);
   font-size: 16px;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   color: #2c3e50;
   font-family: inherit;
-  height: 56px; /* Фиксированная высота для инпутов */
+  height: 60px;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .InputField:focus {
   outline: none;
-  border-color: #3498db;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-  transform: translateY(-1px);
+  border-color: #ffffff;
+  background: #ffffff;
+  box-shadow: 
+    0 0 0 4px rgba(255, 255, 255, 0.3),
+    0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
 .InputField::placeholder {
@@ -86,61 +115,69 @@
 }
 
 .InputField:disabled {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.7);
   cursor: not-allowed;
 }
 
 .ErrorText {
-  margin-top: 4px;
-  font-size: 12px;
-  line-height: 1.2;
-  min-height: 14px; /* Резервируем место для ошибки */
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.3;
+  min-height: 16px;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .SubmitButton {
-  padding: 16px 24px;
+  padding: 18px 32px;
   border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
   color: white;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   font-family: inherit;
-  margin-top: 8px;
+  margin-top: 16px;
   flex-shrink: 0;
-  height: 56px; /* Фиксированная высота кнопки */
+  height: 64px;
+  box-shadow: 
+    0 8px 25px rgba(255, 107, 107, 0.4),
+    0 4px 15px rgba(238, 90, 36, 0.2);
 }
 
 .SubmitButton:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
-  background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+  transform: translateY(-3px);
+  box-shadow: 
+    0 12px 35px rgba(255, 107, 107, 0.5),
+    0 6px 20px rgba(238, 90, 36, 0.3);
+  background: linear-gradient(135deg, #ee5a24 0%, #ff6b6b 100%);
 }
 
 .SubmitButton:active {
-  transform: translateY(0);
+  transform: translateY(-1px);
 }
 
 .SubmitButton:disabled {
   background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .ErrorMessage {
-  border-radius: 8px;
-  background: rgba(231, 76, 60, 0.1);
-  border: 1px solid rgba(231, 76, 60, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(244, 67, 54, 0.3);
   backdrop-filter: blur(10px);
   flex-shrink: 0;
   margin-bottom: 8px;
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.2);
 }
 
 .LoadingSpinner {
@@ -149,58 +186,50 @@
   justify-content: center;
 }
 
-/* Специальные стили для разных типов форм */
-.LoginForm {
-  /* Форма входа - компактная */
-  .FormContent {
-    gap: 24px;
-  }
-}
-
-.RegisterForm {
-  /* Форма регистрации - больше места для дополнительного поля */
-  .FormContent {
-    gap: 20px;
-  }
-}
-
 /* Адаптивность */
 @media (max-width: 480px) {
   .FormContainer {
     max-width: 100%;
-    padding: 0 20px;
+    padding: 16px;
   }
   
   .Form {
-    padding: 30px 20px;
-    gap: 18px;
+    padding: 36px 24px;
+    gap: 20px;
+  }
+  
+  .FormTitle {
+    font-size: 1.75rem;
   }
   
   .InputField {
-    padding: 14px 16px;
-    font-size: 16px; /* Предотвращает зум на iOS */
-    height: 52px;
+    padding: 16px 20px;
+    font-size: 16px;
+    height: 56px;
   }
   
   .SubmitButton {
-    height: 52px;
+    height: 56px;
+    font-size: 16px;
   }
   
   .InputWrapper {
-    min-height: 52px;
+    min-height: 68px;
   }
 }
 
-/* Плавная анимация изменения высоты */
+/* Плавная анимация */
 .Form {
-  transition: height 0.3s ease;
+  animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Улучшенное выравнивание для центрирования */
-.FormContainer {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
