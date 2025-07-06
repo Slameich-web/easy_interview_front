@@ -11,6 +11,7 @@ export const LogoutButton = () => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
+    console.log("///////////////////////");
     setIsLoggingOut(true);
 
     try {
@@ -24,20 +25,8 @@ export const LogoutButton = () => {
   };
 
   return (
-    <IconButton
-      onClick={handleLogout}
-      disabled={isLoggingOut}
-      sx={{
-        px: 3,
-        py: 1.5,
-        minWidth: "120px",
-        fontSize: "14px",
-        fontWeight: 600,
-        letterSpacing: "0.5px",
-        textShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-      }}
-    >
-      <Box display="flex" alignItems="center" gap={1}>
+    <IconButton onClick={handleLogout} disabled={isLoggingOut}>
+      <Box onClick={handleLogout} display="flex" alignItems="center" gap={1}>
         {isLoggingOut ? (
           <>
             <LoadingSpinner size={16} />

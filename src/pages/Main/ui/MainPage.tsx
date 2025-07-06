@@ -24,16 +24,7 @@ const MainPage = () => {
 
   if (!isAuth) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
-        sx={{
-          background:
-            "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
-        }}
-      >
+      <Box display="flex" justifyContent="center" alignItems="center">
         <LoadingSpinner size={60} />
       </Box>
     );
@@ -63,9 +54,6 @@ const MainPage = () => {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
-        background:
-          "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
         position: "relative",
         "&::before": {
           content: '""',
@@ -74,12 +62,6 @@ const MainPage = () => {
           left: 0,
           width: "100%",
           height: "100%",
-          background: `
-            radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%)
-          `,
-          zIndex: 1,
         },
       }}
     >

@@ -8,9 +8,7 @@ const PageContainer = styled(Box)({
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
-  minHeight: "100vh",
   gap: "32px",
-  background: "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
   padding: "20px",
   position: "relative",
   overflow: "hidden",
@@ -21,10 +19,6 @@ const PageContainer = styled(Box)({
     left: 0,
     width: "100%",
     height: "100%",
-    background: `
-      radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%)
-    `,
     zIndex: 1,
   },
   "& > *": {

@@ -56,7 +56,8 @@ const FormCard = styled(Card)({
   width: "100%",
   maxWidth: "450px",
   padding: "48px 40px",
-  background: "linear-gradient(145deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
+  background:
+    "linear-gradient(145deg, #667eea 0%,rgb(109, 45, 173) 50%,rgb(117, 137, 250) 100%)",
   boxShadow: `
     0 25px 50px rgba(102, 126, 234, 0.25),
     0 10px 30px rgba(118, 75, 162, 0.15),
@@ -76,8 +77,6 @@ const FormCard = styled(Card)({
     left: "-50%",
     width: "200%",
     height: "200%",
-    background:
-      "radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%)",
     animation: "shimmer 3s ease-in-out infinite",
     zIndex: -1,
   },
@@ -179,13 +178,7 @@ const Form = ({
   };
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-      p={2.5}
-    >
+    <Box display="flex" justifyContent="center" alignItems="center" p={2.5}>
       <FormCard>
         <Box
           component="form"
@@ -232,7 +225,6 @@ const Form = ({
               value={email}
               onChange={handleEmailChange}
               placeholder="Введите ваш email"
-              label="Email"
               disabled={isLoading}
               error={!!emailError}
               helperText={emailError || " "}
@@ -245,7 +237,6 @@ const Form = ({
               value={password}
               onChange={handlePasswordChange}
               placeholder="Введите ваш пароль"
-              label="Пароль"
               disabled={isLoading}
               error={!!passwordError}
               helperText={passwordError || " "}
@@ -259,7 +250,6 @@ const Form = ({
                 value={confirmPassword}
                 onChange={handleConfirmPasswordChange}
                 placeholder="Подтвердите пароль"
-                label="Подтверждение пароля"
                 disabled={isLoading}
                 error={!!confirmPasswordError}
                 helperText={confirmPasswordError || " "}
