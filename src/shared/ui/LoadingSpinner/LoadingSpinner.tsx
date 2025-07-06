@@ -2,9 +2,10 @@ import { CircularProgress, Box, BoxProps } from "@mui/material";
 
 interface LoadingSpinnerProps extends BoxProps {
   size?: number;
+  color?: string;
 }
 
-const LoadingSpinner = ({ size = 40, ...props }: LoadingSpinnerProps) => {
+const LoadingSpinner = ({ size = 40, color = "inherit", ...props }: LoadingSpinnerProps) => {
   return (
     <Box 
       display="flex" 
@@ -12,7 +13,15 @@ const LoadingSpinner = ({ size = 40, ...props }: LoadingSpinnerProps) => {
       alignItems="center" 
       {...props}
     >
-      <CircularProgress size={size} />
+      <CircularProgress 
+        size={size} 
+        sx={{ 
+          color: color,
+          '& .MuiCircularProgress-circle': {
+            strokeLinecap: 'round',
+          }
+        }} 
+      />
     </Box>
   );
 };
