@@ -43,26 +43,29 @@ const Form = ({
     await handleClick(email, password, showPasswordConfirmation ? confirmPassword : undefined);
   };
 
+  // Определяем класс формы для разных типов
+  const formTypeClass = showPasswordConfirmation ? styles.RegisterForm : styles.LoginForm;
+
   return (
     <div className={styles.FormContainer}>
-      <form className={styles.Form} onSubmit={handleSubmit}>
+      <form className={`${styles.Form} ${formTypeClass}`} onSubmit={handleSubmit}>
         <Typography variant="h4" className={styles.FormTitle}>
           {title}
         </Typography>
         
+        {error && (
+          <ErrorMessage 
+            message={error} 
+            className={styles.ErrorMessage}
+            sx={{ 
+              backgroundColor: 'rgba(244, 67, 54, 0.1)',
+              border: '1px solid rgba(244, 67, 54, 0.3)',
+              color: '#d32f2f'
+            }} 
+          />
+        )}
+        
         <div className={styles.FormContent}>
-          {error && (
-            <ErrorMessage 
-              message={error} 
-              className={styles.ErrorMessage}
-              sx={{ 
-                backgroundColor: 'rgba(244, 67, 54, 0.1)',
-                border: '1px solid rgba(244, 67, 54, 0.3)',
-                color: '#d32f2f'
-              }} 
-            />
-          )}
-          
           <div className={styles.InputWrapper}>
             <input
               type="email"
@@ -75,11 +78,13 @@ const Form = ({
                 borderColor: emailError ? '#f44336' : undefined
               }}
             />
-            {emailError && (
-              <Typography variant="caption" sx={{ color: '#f44336', mt: 0.5, display: 'block' }}>
-                {emailError}
-              </Typography>
-            )}
+            <Typography 
+              variant="caption" 
+              className={styles.ErrorText}
+              sx={{ color: emailError ? '#f44336' : 'transparent' }}
+            >
+              {emailError || '\u00A0'} {/* Неразрывный пробел для сохранения высоты */}
+            </Typography>
           </div>
 
           <div className={styles.InputWrapper}>
@@ -94,11 +99,13 @@ const Form = ({
                 borderColor: passwordError ? '#f44336' : undefined
               }}
             />
-            {passwordError && (
-              <Typography variant="caption" sx={{ color: '#f44336', mt: 0.5, display: 'block' }}>
-                {passwordError}
-              </Typography>
-            )}
+            <Typography 
+              variant="caption" 
+              className={styles.ErrorText}
+              sx={{ color: passwordError ? '#f44336' : 'transparent' }}
+            >
+              {passwordError || '\u00A0'}
+            </Typography>
           </div>
 
           {showPasswordConfirmation && (
@@ -114,11 +121,13 @@ const Form = ({
                   borderColor: confirmPasswordError ? '#f44336' : undefined
                 }}
               />
-              {confirmPasswordError && (
-                <Typography variant="caption" sx={{ color: '#f44336', mt: 0.5, display: 'block' }}>
-                  {confirmPasswordError}
-                </Typography>
-              )}
+              <Typography 
+                variant="caption" 
+                className={styles.ErrorText}
+                sx={{ color: confirmPasswordError ? '#f44336' : 'transparent' }}
+              >
+                {confirmPasswordError || '\u00A0'}
+              </Typography>
             </div>
           )}
         </div>
