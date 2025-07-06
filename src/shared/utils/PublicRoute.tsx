@@ -1,14 +1,15 @@
 import { useSelector } from "react-redux";
-import { Outlet, Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { selectAuth } from "../../features/auth";
 
-const PublicRoute = () => {
-  const auth = useSelector(selectAuth);
-  if (auth.id) {
+const ProtectedRoute = () => {
+  const user = useSelector(selectAuth);
+
+  if (user?.email) {
     return <Navigate to="/" replace />;
   }
 
   return <Outlet />;
 };
 
-export default PublicRoute;
+export default ProtectedRoute;

@@ -1,11 +1,11 @@
 import { useSelector } from "react-redux";
-import { Outlet, Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { selectAuth } from "../../features/auth";
 
 const ProtectedRoute = () => {
-  const auth = useSelector(selectAuth);
+  const user = useSelector(selectAuth);
 
-  if (!auth.id) {
+  if (!user?.email) {
     return <Navigate to="/login" replace />;
   }
 

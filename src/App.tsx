@@ -1,22 +1,28 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { LoginPage } from "./pages/Login";
 import { RegisterPage } from "./pages/Register";
 import { MainPage } from "./pages/Main";
 import styles from "./App.module.scss";
-import { useEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useDispatch } from "react-redux";
-import { setUser } from "./features/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAuthLoading, setUser } from "./features/auth";
 import ProtectedRoute from "./shared/utils/ProtectedRoute";
 import PublicRoute from "./shared/utils/PublicRoute";
+import { setLoading } from "./features/auth/model/authSlice";
+import { LoadingSpinner } from "./shared/ui/LoadingSpinner";
+import { Box } from "@mui/material";
 
 function App() {
   const auth = getAuth();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [authChecked, setAuthChecked] = useState(false);
+  const isLoading = useSelector(selectAuthLoading);
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+  useLayoutEffect(() => {
+    dispatch(setLoading(true));
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user?.email) {
         dispatch(
           setUser({
@@ -26,8 +32,26 @@ function App() {
           })
         );
       }
+      setAuthChecked(true);
+      dispatch(setLoading(false));
     });
-  }, [auth, dispatch, navigate]);
+
+    return () => unsubscribe();
+  }, [auth, dispatch]);
+
+  if (!authChecked || isLoading) {
+    return (
+      <Box
+        marginTop="50vh"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <LoadingSpinner size={20} />
+      </Box>
+    );
+  }
+
   return (
     <div className={styles.App}>
       <Routes>
@@ -37,6 +61,7 @@ function App() {
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<MainPage />} />
+          <Route path="/test" element={<div>TEST</div>} />
         </Route>
       </Routes>
     </div>
