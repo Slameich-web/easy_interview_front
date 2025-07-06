@@ -1,8 +1,8 @@
 import Typography from "@mui/material/Typography";
 import styles from "./Form.module.scss";
-import { useState } from "react";
 import { ErrorMessage } from "../../ErrorMessage";
 import { LoadingSpinner } from "../../LoadingSpinner";
+import { useFormValidation } from "../../../hooks/useFormValidation";
 
 interface FormProps {
   title: string;
@@ -21,93 +21,27 @@ const Form = ({
   error,
   showPasswordConfirmation = false 
 }: FormProps) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
-
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.trim()) {
-      setEmailError("Email обязателен");
-      return false;
-    }
-    if (!emailRegex.test(email)) {
-      setEmailError("Введите корректный email");
-      return false;
-    }
-    setEmailError("");
-    return true;
-  };
-
-  const validatePassword = (password: string) => {
-    if (!password.trim()) {
-      setPasswordError("Пароль обязателен");
-      return false;
-    }
-    if (password.length < 6) {
-      setPasswordError("Пароль должен содержать минимум 6 символов");
-      return false;
-    }
-    setPasswordError("");
-    return true;
-  };
-
-  const validateConfirmPassword = (confirmPassword: string, password: string) => {
-    if (!showPasswordConfirmation) return true;
-    
-    if (!confirmPassword.trim()) {
-      setConfirmPasswordError("Подтверждение пароля обязательно");
-      return false;
-    }
-    if (confirmPassword !== password) {
-      setConfirmPasswordError("Пароли не совпадают");
-      return false;
-    }
-    setConfirmPasswordError("");
-    return true;
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEmail(value);
-    if (emailError) validateEmail(value);
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPassword(value);
-    if (passwordError) validatePassword(value);
-    if (showPasswordConfirmation && confirmPassword) {
-      validateConfirmPassword(confirmPassword, value);
-    }
-  };
-
-  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setConfirmPassword(value);
-    if (confirmPasswordError) validateConfirmPassword(value, password);
-  };
+  const {
+    email,
+    password,
+    confirmPassword,
+    emailError,
+    passwordError,
+    confirmPasswordError,
+    handleEmailChange,
+    handlePasswordChange,
+    handleConfirmPasswordChange,
+    validateAllFields,
+    isFormValid
+  } = useFormValidation({ showPasswordConfirmation });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const isEmailValid = validateEmail(email);
-    const isPasswordValid = validatePassword(password);
-    const isConfirmPasswordValid = validateConfirmPassword(confirmPassword, password);
-    
-    if (!isEmailValid || !isPasswordValid || !isConfirmPasswordValid) return;
+    if (!validateAllFields()) return;
     
     await handleClick(email, password, showPasswordConfirmation ? confirmPassword : undefined);
   };
-
-  const isFormValid = email.trim() && 
-    password.trim() && 
-    !emailError && 
-    !passwordError && 
-    (!showPasswordConfirmation || (confirmPassword.trim() && !confirmPasswordError));
 
   return (
     <div className={styles.FormContainer}>
