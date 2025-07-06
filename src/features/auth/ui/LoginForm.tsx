@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Form } from "../../../shared/ui/Form";
@@ -39,6 +38,7 @@ export const LoginForm = () => {
       handleClick={handleLogin}
       isLoading={isLoading}
       error={error}
+      showPasswordConfirmation={false}
     />
   );
 };

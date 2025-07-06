@@ -6,17 +6,27 @@ import { LoadingSpinner } from "../../LoadingSpinner";
 
 interface FormProps {
   title: string;
-  handleClick: (email: string, password: string) => Promise<void>;
+  handleClick: (email: string, password: string, confirmPassword?: string) => Promise<void>;
   buttonTitle: string;
   isLoading?: boolean;
   error?: string;
+  showPasswordConfirmation?: boolean;
 }
 
-const Form = ({ title, handleClick, buttonTitle, isLoading = false, error }: FormProps) => {
+const Form = ({ 
+  title, 
+  handleClick, 
+  buttonTitle, 
+  isLoading = false, 
+  error,
+  showPasswordConfirmation = false 
+}: FormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -45,6 +55,21 @@ const Form = ({ title, handleClick, buttonTitle, isLoading = false, error }: For
     return true;
   };
 
+  const validateConfirmPassword = (confirmPassword: string, password: string) => {
+    if (!showPasswordConfirmation) return true;
+    
+    if (!confirmPassword.trim()) {
+      setConfirmPasswordError("Подтверждение пароля обязательно");
+      return false;
+    }
+    if (confirmPassword !== password) {
+      setConfirmPasswordError("Пароли не совпадают");
+      return false;
+    }
+    setConfirmPasswordError("");
+    return true;
+  };
+
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
@@ -55,6 +80,15 @@ const Form = ({ title, handleClick, buttonTitle, isLoading = false, error }: For
     const value = e.target.value;
     setPassword(value);
     if (passwordError) validatePassword(value);
+    if (showPasswordConfirmation && confirmPassword) {
+      validateConfirmPassword(confirmPassword, value);
+    }
+  };
+
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+    if (confirmPasswordError) validateConfirmPassword(value, password);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -62,84 +96,112 @@ const Form = ({ title, handleClick, buttonTitle, isLoading = false, error }: For
     
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
+    const isConfirmPasswordValid = validateConfirmPassword(confirmPassword, password);
     
-    if (!isEmailValid || !isPasswordValid) return;
+    if (!isEmailValid || !isPasswordValid || !isConfirmPasswordValid) return;
     
-    await handleClick(email, password);
+    await handleClick(email, password, showPasswordConfirmation ? confirmPassword : undefined);
   };
 
-  const isFormValid = email.trim() && password.trim() && !emailError && !passwordError;
+  const isFormValid = email.trim() && 
+    password.trim() && 
+    !emailError && 
+    !passwordError && 
+    (!showPasswordConfirmation || (confirmPassword.trim() && !confirmPasswordError));
 
   return (
-    <form className={styles.Form} onSubmit={handleSubmit}>
-      <Typography variant="h4" className={styles.FormTitle}>
-        {title}
-      </Typography>
-      
-      {error && (
-        <ErrorMessage 
-          message={error} 
-          className={styles.ErrorMessage}
-          sx={{ 
-            backgroundColor: 'rgba(244, 67, 54, 0.1)',
-            border: '1px solid rgba(244, 67, 54, 0.3)',
-            color: '#d32f2f'
-          }} 
-        />
-      )}
-      
-      <div className={styles.InputWrapper}>
-        <input
-          type="email"
-          value={email}
-          onChange={handleEmailChange}
-          placeholder="Введите ваш email"
-          className={styles.InputField}
-          disabled={isLoading}
-          style={{
-            borderColor: emailError ? '#f44336' : undefined
-          }}
-        />
-        {emailError && (
-          <Typography variant="caption" sx={{ color: '#f44336', mt: 0.5, display: 'block' }}>
-            {emailError}
-          </Typography>
+    <div className={styles.FormContainer}>
+      <form className={styles.Form} onSubmit={handleSubmit}>
+        <Typography variant="h4" className={styles.FormTitle}>
+          {title}
+        </Typography>
+        
+        {error && (
+          <ErrorMessage 
+            message={error} 
+            className={styles.ErrorMessage}
+            sx={{ 
+              backgroundColor: 'rgba(244, 67, 54, 0.1)',
+              border: '1px solid rgba(244, 67, 54, 0.3)',
+              color: '#d32f2f'
+            }} 
+          />
         )}
-      </div>
+        
+        <div className={styles.InputWrapper}>
+          <input
+            type="email"
+            value={email}
+            onChange={handleEmailChange}
+            placeholder="Введите ваш email"
+            className={styles.InputField}
+            disabled={isLoading}
+            style={{
+              borderColor: emailError ? '#f44336' : undefined
+            }}
+          />
+          {emailError && (
+            <Typography variant="caption" sx={{ color: '#f44336', mt: 0.5, display: 'block' }}>
+              {emailError}
+            </Typography>
+          )}
+        </div>
 
-      <div className={styles.InputWrapper}>
-        <input
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-          placeholder="Введите ваш пароль"
-          className={styles.InputField}
-          disabled={isLoading}
-          style={{
-            borderColor: passwordError ? '#f44336' : undefined
-          }}
-        />
-        {passwordError && (
-          <Typography variant="caption" sx={{ color: '#f44336', mt: 0.5, display: 'block' }}>
-            {passwordError}
-          </Typography>
-        )}
-      </div>
-      
-      <button 
-        type="submit" 
-        disabled={isLoading || !isFormValid}
-        className={styles.SubmitButton}
-      >
-        {isLoading ? (
-          <div className={styles.LoadingSpinner}>
-            <LoadingSpinner size={20} />
+        <div className={styles.InputWrapper}>
+          <input
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+            placeholder="Введите ваш пароль"
+            className={styles.InputField}
+            disabled={isLoading}
+            style={{
+              borderColor: passwordError ? '#f44336' : undefined
+            }}
+          />
+          {passwordError && (
+            <Typography variant="caption" sx={{ color: '#f44336', mt: 0.5, display: 'block' }}>
+              {passwordError}
+            </Typography>
+          )}
+        </div>
+
+        {showPasswordConfirmation && (
+          <div className={styles.InputWrapper}>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              placeholder="Подтвердите пароль"
+              className={styles.InputField}
+              disabled={isLoading}
+              style={{
+                borderColor: confirmPasswordError ? '#f44336' : undefined
+              }}
+            />
+            {confirmPasswordError && (
+              <Typography variant="caption" sx={{ color: '#f44336', mt: 0.5, display: 'block' }}>
+                {confirmPasswordError}
+              </Typography>
+            )}
           </div>
-        ) : (
-          buttonTitle
         )}
-      </button>
-    </form>
+        
+        <button 
+          type="submit" 
+          disabled={isLoading || !isFormValid}
+          className={styles.SubmitButton}
+        >
+          {isLoading ? (
+            <div className={styles.LoadingSpinner}>
+              <LoadingSpinner size={20} />
+            </div>
+          ) : (
+            buttonTitle
+          )}
+        </button>
+      </form>
+    </div>
   );
 };
 

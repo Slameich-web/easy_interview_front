@@ -11,7 +11,7 @@ export const RegisterForm = () => {
   const isLoading = useSelector(selectAuthLoading);
   const error = useSelector(selectAuthError);
 
-  const handleRegister = async (email: string, password: string) => {
+  const handleRegister = async (email: string, password: string, confirmPassword?: string) => {
     dispatch(setLoading(true));
     
     try {
@@ -38,6 +38,7 @@ export const RegisterForm = () => {
       handleClick={handleRegister}
       isLoading={isLoading}
       error={error}
+      showPasswordConfirmation={true}
     />
   );
 };
