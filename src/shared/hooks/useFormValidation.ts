@@ -17,7 +17,8 @@ export const useFormValidation = ({ showPasswordConfirmation = false }: UseFormV
     const value = e.target.value;
     setEmail(value);
     
-    if (emailError) {
+    // Валидируем email только если поле не пустое или уже была ошибка
+    if (value.trim() || emailError) {
       const validation = validateEmail(value);
       setEmailError(validation.error);
     }
@@ -27,12 +28,14 @@ export const useFormValidation = ({ showPasswordConfirmation = false }: UseFormV
     const value = e.target.value;
     setPassword(value);
     
-    if (passwordError) {
+    // Валидируем пароль только если поле не пустое или уже была ошибка
+    if (value.trim() || passwordError) {
       const validation = validatePassword(value);
       setPasswordError(validation.error);
     }
     
-    if (showPasswordConfirmation && confirmPassword) {
+    // Всегда проверяем подтверждение пароля если оно включено и заполнено
+    if (showPasswordConfirmation && confirmPassword.trim()) {
       const confirmValidation = validateConfirmPassword(confirmPassword, value, showPasswordConfirmation);
       setConfirmPasswordError(confirmValidation.error);
     }
@@ -42,7 +45,8 @@ export const useFormValidation = ({ showPasswordConfirmation = false }: UseFormV
     const value = e.target.value;
     setConfirmPassword(value);
     
-    if (confirmPasswordError) {
+    // Всегда валидируем подтверждение пароля при его изменении
+    if (showPasswordConfirmation && (value.trim() || confirmPasswordError)) {
       const validation = validateConfirmPassword(value, password, showPasswordConfirmation);
       setConfirmPasswordError(validation.error);
     }
