@@ -13,10 +13,10 @@ export const LoginForm = () => {
 
   const handleLogin = async (email: string, password: string) => {
     dispatch(setLoading(true));
-    
+
     try {
       const { user } = await signIn({ email, password });
-      
+
       dispatch(
         setUser({
           email: user.email!,
@@ -24,17 +24,19 @@ export const LoginForm = () => {
           id: user.uid,
         })
       );
-      
+
       navigate("/");
     } catch (error) {
-      dispatch(setError(error instanceof Error ? error.message : "Произошла ошибка"));
+      dispatch(
+        setError(error instanceof Error ? error.message : "Произошла ошибка")
+      );
     }
   };
 
   return (
-    <Form 
-      title="Вход" 
-      buttonTitle="Войти" 
+    <Form
+      title="Вход"
+      buttonTitle="Войти"
       handleClick={handleLogin}
       isLoading={isLoading}
       error={error}

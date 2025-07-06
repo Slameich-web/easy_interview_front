@@ -11,12 +11,12 @@ export const RegisterForm = () => {
   const isLoading = useSelector(selectAuthLoading);
   const error = useSelector(selectAuthError);
 
-  const handleRegister = async (email: string, password: string, confirmPassword?: string) => {
+  const handleRegister = async (email: string, password: string) => {
     dispatch(setLoading(true));
-    
+
     try {
       const { user } = await signUp({ email, password });
-      
+
       dispatch(
         setUser({
           email: user.email!,
@@ -24,10 +24,12 @@ export const RegisterForm = () => {
           id: user.uid,
         })
       );
-      
+
       navigate("/");
     } catch (error) {
-      dispatch(setError(error instanceof Error ? error.message : "Произошла ошибка"));
+      dispatch(
+        setError(error instanceof Error ? error.message : "Произошла ошибка")
+      );
     }
   };
 

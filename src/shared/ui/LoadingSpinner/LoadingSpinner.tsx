@@ -5,22 +5,21 @@ interface LoadingSpinnerProps extends BoxProps {
   color?: string;
 }
 
-const LoadingSpinner = ({ size = 40, color = "inherit", ...props }: LoadingSpinnerProps) => {
+const LoadingSpinner = ({
+  size = 40,
+  color = "inherit",
+  ...props
+}: LoadingSpinnerProps) => {
   return (
-    <Box 
-      display="flex" 
-      justifyContent="center" 
-      alignItems="center" 
-      {...props}
-    >
-      <CircularProgress 
-        size={size} 
-        sx={{ 
+    <Box display="flex" justifyContent="center" alignItems="center" {...props}>
+      <CircularProgress
+        size={size}
+        sx={{
           color: color,
-          '& .MuiCircularProgress-circle': {
-            strokeLinecap: 'round',
-          }
-        }} 
+          "& .MuiCircularProgress-circle": {
+            strokeLinecap: "round",
+          },
+        }}
       />
     </Box>
   );

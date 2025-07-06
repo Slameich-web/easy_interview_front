@@ -7,141 +7,150 @@ import Button from "../../Button";
 import { useFormValidation } from "../../../hooks/useFormValidation";
 
 const StyledTextField = styled(TextField)({
-  '& .MuiOutlinedInput-root': {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderRadius: '16px',
-    fontSize: '16px',
+  "& .MuiOutlinedInput-root": {
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    borderRadius: "16px",
+    fontSize: "16px",
     fontWeight: 500,
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-    '& fieldset': {
-      borderColor: 'rgba(255, 255, 255, 0.3)',
-      borderWidth: '2px',
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    "& fieldset": {
+      borderColor: "rgba(255, 255, 255, 0.3)",
+      borderWidth: "2px",
     },
-    '&:hover fieldset': {
-      borderColor: 'rgba(255, 255, 255, 0.5)',
+    "&:hover fieldset": {
+      borderColor: "rgba(255, 255, 255, 0.5)",
     },
-    '&.Mui-focused fieldset': {
-      borderColor: '#ffffff',
-      boxShadow: '0 0 0 4px rgba(255, 255, 255, 0.3), 0 8px 25px rgba(0, 0, 0, 0.15)',
+    "&.Mui-focused fieldset": {
+      borderColor: "#ffffff",
+      boxShadow:
+        "0 0 0 4px rgba(255, 255, 255, 0.3), 0 8px 25px rgba(0, 0, 0, 0.15)",
     },
-    '&.Mui-focused': {
-      backgroundColor: '#ffffff',
-      transform: 'translateY(-2px)',
+    "&.Mui-focused": {
+      backgroundColor: "#ffffff",
+      transform: "translateY(-2px)",
     },
   },
-  '& .MuiInputLabel-root': {
-    color: '#7f8c8d',
+  "& .MuiInputLabel-root": {
+    color: "#7f8c8d",
     fontWeight: 400,
   },
-  '& .MuiInputLabel-root.Mui-focused': {
-    color: '#2c3e50',
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "#2c3e50",
   },
-  '& .MuiOutlinedInput-input': {
-    padding: '18px 24px',
-    color: '#2c3e50',
+  "& .MuiOutlinedInput-input": {
+    padding: "18px 24px",
+    color: "#2c3e50",
   },
-  '& .MuiFormHelperText-root': {
-    marginTop: '6px',
-    fontSize: '13px',
+  "& .MuiFormHelperText-root": {
+    marginTop: "6px",
+    fontSize: "13px",
     fontWeight: 500,
-    textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+    textShadow: "0 1px 2px rgba(0, 0, 0, 0.1)",
   },
-  '& .MuiFormHelperText-root.Mui-error': {
-    color: '#f44336',
+  "& .MuiFormHelperText-root.Mui-error": {
+    color: "#f44336",
   },
 });
 
 const FormCard = styled(Card)({
-  width: '100%',
-  maxWidth: '450px',
-  padding: '48px 40px',
-  background: 'linear-gradient(145deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+  width: "100%",
+  maxWidth: "450px",
+  padding: "48px 40px",
+  background: "linear-gradient(145deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
   boxShadow: `
     0 25px 50px rgba(102, 126, 234, 0.25),
     0 10px 30px rgba(118, 75, 162, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.2)
   `,
-  border: '1px solid rgba(255, 255, 255, 0.3)',
-  backdropFilter: 'blur(20px)',
-  animation: 'slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-  '&::before': {
-    background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 100%)',
+  border: "1px solid rgba(255, 255, 255, 0.3)",
+  backdropFilter: "blur(20px)",
+  animation: "slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+  "&::before": {
+    background:
+      "linear-gradient(145deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 100%)",
   },
-  '&::after': {
+  "&::after": {
     content: '""',
-    position: 'absolute',
-    top: '-50%',
-    left: '-50%',
-    width: '200%',
-    height: '200%',
-    background: 'radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%)',
-    animation: 'shimmer 3s ease-in-out infinite',
+    position: "absolute",
+    top: "-50%",
+    left: "-50%",
+    width: "200%",
+    height: "200%",
+    background:
+      "radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%)",
+    animation: "shimmer 3s ease-in-out infinite",
     zIndex: -1,
   },
-  '@keyframes slideInUp': {
+  "@keyframes slideInUp": {
     from: {
       opacity: 0,
-      transform: 'translateY(30px)',
+      transform: "translateY(30px)",
     },
     to: {
       opacity: 1,
-      transform: 'translateY(0)',
+      transform: "translateY(0)",
     },
   },
-  '@keyframes shimmer': {
-    '0%, 100%': { 
-      transform: 'rotate(0deg) scale(1)', 
-      opacity: 0.3 
+  "@keyframes shimmer": {
+    "0%, 100%": {
+      transform: "rotate(0deg) scale(1)",
+      opacity: 0.3,
     },
-    '50%': { 
-      transform: 'rotate(180deg) scale(1.1)', 
-      opacity: 0.1 
+    "50%": {
+      transform: "rotate(180deg) scale(1.1)",
+      opacity: 0.1,
     },
   },
 });
 
 const SubmitButton = styled(Button)({
-  padding: '18px 32px',
-  borderRadius: '16px',
-  background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)',
-  fontSize: '17px',
+  padding: "18px 32px",
+  borderRadius: "16px",
+  background: "linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)",
+  fontSize: "17px",
   fontWeight: 700,
-  textTransform: 'uppercase',
-  letterSpacing: '1px',
-  marginTop: '16px',
-  height: '64px',
-  boxShadow: '0 8px 25px rgba(255, 107, 107, 0.4), 0 4px 15px rgba(238, 90, 36, 0.2)',
-  '&:hover:not(:disabled)': {
-    transform: 'translateY(-3px)',
-    boxShadow: '0 12px 35px rgba(255, 107, 107, 0.5), 0 6px 20px rgba(238, 90, 36, 0.3)',
-    background: 'linear-gradient(135deg, #ee5a24 0%, #ff6b6b 100%)',
+  textTransform: "uppercase",
+  letterSpacing: "1px",
+  marginTop: "16px",
+  height: "64px",
+  boxShadow:
+    "0 8px 25px rgba(255, 107, 107, 0.4), 0 4px 15px rgba(238, 90, 36, 0.2)",
+  "&:hover:not(:disabled)": {
+    transform: "translateY(-3px)",
+    boxShadow:
+      "0 12px 35px rgba(255, 107, 107, 0.5), 0 6px 20px rgba(238, 90, 36, 0.3)",
+    background: "linear-gradient(135deg, #ee5a24 0%, #ff6b6b 100%)",
   },
-  '&:active': {
-    transform: 'translateY(-1px)',
+  "&:active": {
+    transform: "translateY(-1px)",
   },
-  '&:disabled': {
-    background: 'linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%)',
-    transform: 'none',
-    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+  "&:disabled": {
+    background: "linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%)",
+    transform: "none",
+    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
   },
 });
 
 interface FormProps {
   title: string;
-  handleClick: (email: string, password: string, confirmPassword?: string) => Promise<void>;
+  handleClick: (
+    email: string,
+    password: string,
+    confirmPassword?: string
+  ) => Promise<void>;
   buttonTitle: string;
   isLoading?: boolean;
-  error?: string;
+  error?: string | null;
   showPasswordConfirmation?: boolean;
 }
 
-const Form = ({ 
-  title, 
-  handleClick, 
-  buttonTitle, 
-  isLoading = false, 
+const Form = ({
+  title,
+  handleClick,
+  buttonTitle,
+  isLoading = false,
   error,
-  showPasswordConfirmation = false 
+  showPasswordConfirmation = false,
 }: FormProps) => {
   const {
     email,
@@ -154,59 +163,69 @@ const Form = ({
     handlePasswordChange,
     handleConfirmPasswordChange,
     validateAllFields,
-    isFormValid
+    isFormValid,
   } = useFormValidation({ showPasswordConfirmation });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateAllFields()) return;
-    
-    await handleClick(email, password, showPasswordConfirmation ? confirmPassword : undefined);
+
+    await handleClick(
+      email,
+      password,
+      showPasswordConfirmation ? confirmPassword : undefined
+    );
   };
 
   return (
-    <Box 
-      display="flex" 
-      justifyContent="center" 
-      alignItems="center" 
-      minHeight="100vh" 
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
       p={2.5}
     >
       <FormCard>
-        <Box component="form" onSubmit={handleSubmit} display="flex" flexDirection="column" gap={3}>
-          <Typography 
-            variant="h4" 
-            sx={{ 
-              color: '#ffffff',
-              textAlign: 'center',
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          display="flex"
+          flexDirection="column"
+          gap={3}
+        >
+          <Typography
+            variant="h4"
+            sx={{
+              color: "#ffffff",
+              textAlign: "center",
               fontWeight: 700,
               mb: 2,
-              textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-              fontSize: '2rem',
-              letterSpacing: '0.5px'
+              textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
+              fontSize: "2rem",
+              letterSpacing: "0.5px",
             }}
           >
             {title}
           </Typography>
-          
+
           {error && (
-            <ErrorMessage 
-              message={error} 
-              sx={{ 
-                borderRadius: '12px',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                border: '2px solid rgba(244, 67, 54, 0.3)',
-                backdropFilter: 'blur(10px)',
+            <ErrorMessage
+              message={error}
+              sx={{
+                borderRadius: "12px",
+                backgroundColor: "rgba(255, 255, 255, 0.95)",
+                border: "2px solid rgba(244, 67, 54, 0.3)",
+                backdropFilter: "blur(10px)",
                 mb: 1,
-                boxShadow: '0 4px 15px rgba(244, 67, 54, 0.2)',
-                '& .MuiAlert-message': {
-                  color: '#d32f2f'
-                }
-              }} 
+                boxShadow: "0 4px 15px rgba(244, 67, 54, 0.2)",
+                "& .MuiAlert-message": {
+                  color: "#d32f2f",
+                },
+              }}
             />
           )}
-          
+
           <Box display="flex" flexDirection="column" gap={3}>
             <StyledTextField
               type="email"
@@ -216,7 +235,7 @@ const Form = ({
               label="Email"
               disabled={isLoading}
               error={!!emailError}
-              helperText={emailError || ' '}
+              helperText={emailError || " "}
               fullWidth
               variant="outlined"
             />
@@ -229,7 +248,7 @@ const Form = ({
               label="Пароль"
               disabled={isLoading}
               error={!!passwordError}
-              helperText={passwordError || ' '}
+              helperText={passwordError || " "}
               fullWidth
               variant="outlined"
             />
@@ -243,15 +262,15 @@ const Form = ({
                 label="Подтверждение пароля"
                 disabled={isLoading}
                 error={!!confirmPasswordError}
-                helperText={confirmPasswordError || ' '}
+                helperText={confirmPasswordError || " "}
                 fullWidth
                 variant="outlined"
               />
             )}
           </Box>
-          
-          <SubmitButton 
-            type="submit" 
+
+          <SubmitButton
+            type="submit"
             disabled={isLoading || !isFormValid}
             fullWidth
             size="large"

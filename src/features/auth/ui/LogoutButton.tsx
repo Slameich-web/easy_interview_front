@@ -6,17 +6,13 @@ import { removeUser } from "../model/authSlice";
 import { logout } from "../api/authApi";
 import { Box, Typography } from "@mui/material";
 
-interface LogoutButtonProps {
-  userEmail?: string | null;
-}
-
-export const LogoutButton = ({ userEmail }: LogoutButtonProps) => {
+export const LogoutButton = () => {
   const dispatch = useDispatch();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
-    
+
     try {
       await logout();
       dispatch(removeUser());
@@ -28,17 +24,17 @@ export const LogoutButton = ({ userEmail }: LogoutButtonProps) => {
   };
 
   return (
-    <IconButton 
+    <IconButton
       onClick={handleLogout}
       disabled={isLoggingOut}
       sx={{
         px: 3,
         py: 1.5,
-        minWidth: '120px',
-        fontSize: '14px',
+        minWidth: "120px",
+        fontSize: "14px",
         fontWeight: 600,
-        letterSpacing: '0.5px',
-        textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+        letterSpacing: "0.5px",
+        textShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
       }}
     >
       <Box display="flex" alignItems="center" gap={1}>
