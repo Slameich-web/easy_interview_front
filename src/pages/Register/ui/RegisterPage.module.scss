@@ -5,7 +5,7 @@
   justify-content: center;
   min-height: 100vh;
   gap: 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   padding: 20px;
   position: relative;
   overflow: hidden;
@@ -14,19 +14,14 @@
 .RegisterPage::before {
   content: '';
   position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: floatReverse 20s ease-in-out infinite;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.03) 0%, transparent 50%);
   z-index: 1;
-}
-
-@keyframes floatReverse {
-  0%, 100% { transform: translateX(0px) rotate(0deg); }
-  50% { transform: translateX(-20px) rotate(-180deg); }
 }
 
 .RegisterPage > * {
@@ -35,28 +30,28 @@
 }
 
 .LoginLink {
-  color: white;
+  color: #4a5568;
   text-decoration: none;
   font-size: 16px;
   font-weight: 500;
   padding: 12px 24px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(74, 85, 104, 0.2);
   border-radius: 25px;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
 }
 
 .LoginLink:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(74, 85, 104, 0.4);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 25px rgba(74, 85, 104, 0.1);
 }
 
 .WelcomeText {
-  color: white;
+  color: #2d3748;
   text-align: center;
   margin-bottom: 8px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }

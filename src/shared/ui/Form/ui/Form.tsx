@@ -116,76 +116,78 @@ const Form = ({
           {title}
         </Typography>
         
-        {error && (
-          <ErrorMessage 
-            message={error} 
-            className={styles.ErrorMessage}
-            sx={{ 
-              backgroundColor: 'rgba(244, 67, 54, 0.1)',
-              border: '1px solid rgba(244, 67, 54, 0.3)',
-              color: '#d32f2f'
-            }} 
-          />
-        )}
-        
-        <div className={styles.InputWrapper}>
-          <input
-            type="email"
-            value={email}
-            onChange={handleEmailChange}
-            placeholder="Введите ваш email"
-            className={styles.InputField}
-            disabled={isLoading}
-            style={{
-              borderColor: emailError ? '#f44336' : undefined
-            }}
-          />
-          {emailError && (
-            <Typography variant="caption" sx={{ color: '#f44336', mt: 0.5, display: 'block' }}>
-              {emailError}
-            </Typography>
+        <div className={styles.FormContent}>
+          {error && (
+            <ErrorMessage 
+              message={error} 
+              className={styles.ErrorMessage}
+              sx={{ 
+                backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                border: '1px solid rgba(244, 67, 54, 0.3)',
+                color: '#d32f2f'
+              }} 
+            />
           )}
-        </div>
-
-        <div className={styles.InputWrapper}>
-          <input
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-            placeholder="Введите ваш пароль"
-            className={styles.InputField}
-            disabled={isLoading}
-            style={{
-              borderColor: passwordError ? '#f44336' : undefined
-            }}
-          />
-          {passwordError && (
-            <Typography variant="caption" sx={{ color: '#f44336', mt: 0.5, display: 'block' }}>
-              {passwordError}
-            </Typography>
-          )}
-        </div>
-
-        {showPasswordConfirmation && (
+          
           <div className={styles.InputWrapper}>
             <input
-              type="password"
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
-              placeholder="Подтвердите пароль"
+              type="email"
+              value={email}
+              onChange={handleEmailChange}
+              placeholder="Введите ваш email"
               className={styles.InputField}
               disabled={isLoading}
               style={{
-                borderColor: confirmPasswordError ? '#f44336' : undefined
+                borderColor: emailError ? '#f44336' : undefined
               }}
             />
-            {confirmPasswordError && (
+            {emailError && (
               <Typography variant="caption" sx={{ color: '#f44336', mt: 0.5, display: 'block' }}>
-                {confirmPasswordError}
+                {emailError}
               </Typography>
             )}
           </div>
-        )}
+
+          <div className={styles.InputWrapper}>
+            <input
+              type="password"
+              value={password}
+              onChange={handlePasswordChange}
+              placeholder="Введите ваш пароль"
+              className={styles.InputField}
+              disabled={isLoading}
+              style={{
+                borderColor: passwordError ? '#f44336' : undefined
+              }}
+            />
+            {passwordError && (
+              <Typography variant="caption" sx={{ color: '#f44336', mt: 0.5, display: 'block' }}>
+                {passwordError}
+              </Typography>
+            )}
+          </div>
+
+          {showPasswordConfirmation && (
+            <div className={styles.InputWrapper}>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                placeholder="Подтвердите пароль"
+                className={styles.InputField}
+                disabled={isLoading}
+                style={{
+                  borderColor: confirmPasswordError ? '#f44336' : undefined
+                }}
+              />
+              {confirmPasswordError && (
+                <Typography variant="caption" sx={{ color: '#f44336', mt: 0.5, display: 'block' }}>
+                  {confirmPasswordError}
+                </Typography>
+              )}
+            </div>
+          )}
+        </div>
         
         <button 
           type="submit" 

@@ -1,7 +1,7 @@
 .FormContainer {
   width: 100%;
   max-width: 420px;
-  min-height: 520px; /* Фиксированная минимальная высота для всех форм */
+  min-height: 580px; /* Увеличил для размещения всех полей */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,6 +12,8 @@
   flex-direction: column;
   gap: 20px;
   width: 100%;
+  height: 100%; /* Заполняет весь контейнер */
+  min-height: 540px; /* Фиксированная высота для всех форм */
   padding: 40px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.95);
@@ -20,6 +22,7 @@
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  justify-content: space-between; /* Равномерно распределяет элементы */
 }
 
 .Form::before {
@@ -40,6 +43,15 @@
   font-weight: 700;
   margin-bottom: 8px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0; /* Не сжимается */
+}
+
+.FormContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex-grow: 1; /* Занимает доступное пространство */
+  justify-content: center;
 }
 
 .InputWrapper {
@@ -96,6 +108,7 @@
   letter-spacing: 0.5px;
   font-family: inherit;
   margin-top: 8px;
+  flex-shrink: 0; /* Не сжимается */
 }
 
 .SubmitButton:hover:not(:disabled) {
@@ -120,6 +133,7 @@
   background: rgba(231, 76, 60, 0.1);
   border: 1px solid rgba(231, 76, 60, 0.2);
   backdrop-filter: blur(10px);
+  flex-shrink: 0; /* Не сжимается */
 }
 
 .LoadingSpinner {
@@ -131,12 +145,13 @@
 /* Адаптивность */
 @media (max-width: 480px) {
   .FormContainer {
-    min-height: 480px;
+    min-height: 520px;
   }
   
   .Form {
     padding: 30px 20px;
     gap: 18px;
+    min-height: 480px;
   }
   
   .InputField {
