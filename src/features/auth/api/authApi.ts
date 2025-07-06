@@ -15,10 +15,9 @@ export interface AuthResult {
   user: User;
 }
 
-const auth = getAuth();
-
 export const signIn = async ({ email, password }: AuthCredentials): Promise<AuthResult> => {
   try {
+    const auth = getAuth();
     const result = await signInWithEmailAndPassword(auth, email, password);
     return { user: result.user };
   } catch (error) {
@@ -28,6 +27,7 @@ export const signIn = async ({ email, password }: AuthCredentials): Promise<Auth
 
 export const signUp = async ({ email, password }: AuthCredentials): Promise<AuthResult> => {
   try {
+    const auth = getAuth();
     const result = await createUserWithEmailAndPassword(auth, email, password);
     return { user: result.user };
   } catch (error) {
@@ -37,6 +37,7 @@ export const signUp = async ({ email, password }: AuthCredentials): Promise<Auth
 
 export const logout = async (): Promise<void> => {
   try {
+    const auth = getAuth();
     await signOut(auth);
   } catch (error) {
     throw new Error(`Ошибка выхода: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`);
