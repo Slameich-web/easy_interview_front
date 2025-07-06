@@ -1,6 +1,6 @@
-import { Grid2 as MUIGrid, Grid2Props } from "@mui/material";
+import { Grid as MUIGrid, GridProps } from "@mui/material";
 
-const Grid = (props: Grid2Props) => {
+const Grid = (props: GridProps) => {
   return <MUIGrid {...props} />;
 };
 
