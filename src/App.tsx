@@ -6,7 +6,7 @@ import styles from "./App.module.scss";
 import { useLayoutEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuthLoading, setUser, setUserData } from "./features/auth";
+import { selectAuthLoading, setUser } from "./features/auth";
 import ProtectedRoute from "./shared/utils/ProtectedRoute";
 import PublicRoute from "./shared/utils/PublicRoute";
 import { setLoading } from "./features/auth/model/authSlice";
@@ -28,7 +28,7 @@ function App() {
         try {
           // Получаем данные пользователя из Firestore
           const userData = await getUserFromFirestore(user.uid);
-          
+
           dispatch(
             setUser({
               email: user.email,
