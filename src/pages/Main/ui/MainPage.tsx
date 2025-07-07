@@ -1,6 +1,6 @@
 import { Typography, Box, CardContent } from "@mui/material";
 import { useAuth } from "../../../shared/hooks/useAuth";
-import { LogoutButton } from "../../../features/auth";
+import { LogoutButton, selectUserData } from "../../../features/auth";
 import { LoadingSpinner } from "../../../shared/ui/LoadingSpinner";
 import { Container } from "../../../shared/ui/Container";
 import { AppBar } from "../../../shared/ui/AppBar";
@@ -9,9 +9,11 @@ import { Card } from "../../../shared/ui/Card";
 import { Grid } from "../../../shared/ui/Grid";
 import { Chip } from "../../../shared/ui/Chip";
 import Button from "../../../shared/ui/Button";
+import { useSelector } from "react-redux";
 
 const MainPage = () => {
   const { isAuth, email } = useAuth();
+  const userData = useSelector(selectUserData);
 
   if (!isAuth) {
     return (
@@ -71,7 +73,18 @@ const MainPage = () => {
           </Typography>
 
           <Box display="flex" alignItems="center" gap={2}>
-            <Chip label={email} />
+            <Box display="flex" alignItems="center" gap={1}>
+              <Chip label={email} />
+              {userData && (
+                <Chip 
+                  label={`${userData.studentId} | ${userData.groupId}`} 
+                  sx={{ 
+                    backgroundColor: "rgba(76, 175, 80, 0.2)",
+                    borderColor: "rgba(76, 175, 80, 0.5)"
+                  }}
+                />
+              )}
+            </Box>
             <LogoutButton />
           </Box>
         </Toolbar>

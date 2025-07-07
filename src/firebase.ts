@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -13,24 +13,3 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-// Добавление пользователя
-const addUser = async () => {
-  try {
-    const docRef = await addDoc(collection(db, "users"), {
-      studentId: "ST-2024-001",
-      groupId: "group_fe2024",
-      createdAt: new Date(),
-    });
-    console.log("Документ добавлен с ID: ", docRef.id);
-  } catch (e) {
-    console.error("Ошибка: ", e);
-  }
-};
-addUser();
-const getUsers = async () => {
-  const querySnapshot = await getDocs(collection(db, "users"));
-  querySnapshot.forEach((doc) => {
-    console.log(doc.id, " => ", doc.data());
-  });
-};
-getUsers();

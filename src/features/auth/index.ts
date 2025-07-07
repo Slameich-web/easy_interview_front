@@ -6,5 +6,6 @@ export {
   selectIsAuth,
   selectAuthLoading,
   selectAuthError,
+  selectUserData,
 } from "./model/selectors";
-export { setUser, removeUser } from "./model/authSlice";
+export { setUser, removeUser, setUserData } from "./model/authSlice";

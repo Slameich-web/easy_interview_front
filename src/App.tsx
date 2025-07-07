@@ -6,12 +6,13 @@ import styles from "./App.module.scss";
 import { useLayoutEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuthLoading, setUser } from "./features/auth";
+import { selectAuthLoading, setUser, setUserData } from "./features/auth";
 import ProtectedRoute from "./shared/utils/ProtectedRoute";
 import PublicRoute from "./shared/utils/PublicRoute";
 import { setLoading } from "./features/auth/model/authSlice";
 import { LoadingSpinner } from "./shared/ui/LoadingSpinner";
 import { Box } from "@mui/material";
+import { getUserFromFirestore } from "./features/auth/api/firestoreApi";
 
 function App() {
   const auth = getAuth();
@@ -22,15 +23,31 @@ function App() {
   useLayoutEffect(() => {
     dispatch(setLoading(true));
 
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user?.email) {
-        dispatch(
-          setUser({
-            email: user.email,
-            token: user.refreshToken,
-            id: user.uid,
-          })
-        );
+        try {
+          // Получаем данные пользователя из Firestore
+          const userData = await getUserFromFirestore(user.uid);
+          
+          dispatch(
+            setUser({
+              email: user.email,
+              token: user.refreshToken,
+              id: user.uid,
+              userData: userData || undefined,
+            })
+          );
+        } catch (error) {
+          console.error("Ошибка при загрузке данных пользователя:", error);
+          // Устанавливаем пользователя без данных Firestore
+          dispatch(
+            setUser({
+              email: user.email,
+              token: user.refreshToken,
+              id: user.uid,
+            })
+          );
+        }
       }
       setAuthChecked(true);
       dispatch(setLoading(false));

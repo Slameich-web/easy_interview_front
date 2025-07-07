@@ -7,6 +7,7 @@ import {
   setPersistence,
   browserLocalPersistence,
 } from "firebase/auth";
+import { createUserInFirestore } from "./firestoreApi";
 
 export interface AuthCredentials {
   email: string;
@@ -40,6 +41,10 @@ export const signUp = async ({
 }: AuthCredentials): Promise<AuthResult> => {
   try {
     const result = await createUserWithEmailAndPassword(auth, email, password);
+    
+    // Создаем пользователя в Firestore после успешной регистрации
+    await createUserInFirestore(result.user.uid, email);
+    
     return { user: result.user };
   } catch (error) {
     throw new Error(
