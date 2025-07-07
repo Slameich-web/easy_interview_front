@@ -15,7 +15,7 @@ export const RegisterForm = () => {
     dispatch(setLoading(true));
 
     try {
-      const { user } = await signUp({ email, password });
+      const { user } = await signUp({ email, password, groupId });
 
       dispatch(
         setUser({
@@ -41,6 +41,7 @@ export const RegisterForm = () => {
       isLoading={isLoading}
       error={error}
       showPasswordConfirmation={true}
+      showGroupSelection={true}
     />
   );
 };

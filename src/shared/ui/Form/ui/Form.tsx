@@ -5,6 +5,7 @@ import { LoadingSpinner } from "../../LoadingSpinner";
 import { Card } from "../../Card";
 import Button from "../../Button";
 import { useFormValidation } from "../../../hooks/useFormValidation";
+import { MenuItem, Select, FormControl, InputLabel, FormHelperText } from "@mui/material";
 
 const StyledTextField = styled(TextField)({
   "& .MuiOutlinedInput-root": {
@@ -39,6 +40,53 @@ const StyledTextField = styled(TextField)({
   },
   "& .MuiOutlinedInput-input": {
     padding: "18px 24px",
+    color: "#2c3e50",
+  },
+  "& .MuiFormHelperText-root": {
+    marginTop: "6px",
+    fontSize: "13px",
+    fontWeight: 500,
+    textShadow: "0 1px 2px rgba(0, 0, 0, 0.1)",
+  },
+  "& .MuiFormHelperText-root.Mui-error": {
+    color: "#f44336",
+  },
+});
+
+const StyledSelect = styled(Select)({
+  backgroundColor: "rgba(255, 255, 255, 0.95)",
+  borderRadius: "16px",
+  fontSize: "16px",
+  fontWeight: 500,
+  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderColor: "rgba(255, 255, 255, 0.3)",
+    borderWidth: "2px",
+  },
+  "&:hover .MuiOutlinedInput-notchedOutline": {
+    borderColor: "rgba(255, 255, 255, 0.5)",
+  },
+  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#ffffff",
+    boxShadow:
+      "0 0 0 4px rgba(255, 255, 255, 0.3), 0 8px 25px rgba(0, 0, 0, 0.15)",
+  },
+  "&.Mui-focused": {
+    backgroundColor: "#ffffff",
+    transform: "translateY(-2px)",
+  },
+  "& .MuiSelect-select": {
+    padding: "18px 24px",
+    color: "#2c3e50",
+  },
+});
+
+const StyledFormControl = styled(FormControl)({
+  "& .MuiInputLabel-root": {
+    color: "#7f8c8d",
+    fontWeight: 400,
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
     color: "#2c3e50",
   },
   "& .MuiFormHelperText-root": {
@@ -135,12 +183,14 @@ interface FormProps {
   handleClick: (
     email: string,
     password: string,
-    confirmPassword?: string
+    confirmPassword?: string,
+    groupId?: string
   ) => Promise<void>;
   buttonTitle: string;
   isLoading?: boolean;
   error?: string | null;
   showPasswordConfirmation?: boolean;
+  showGroupSelection?: boolean;
 }
 
 const Form = ({
@@ -150,6 +200,7 @@ const Form = ({
   isLoading = false,
   error,
   showPasswordConfirmation = false,
+  showGroupSelection = false,
 }: FormProps) => {
   const {
     email,
@@ -165,17 +216,39 @@ const Form = ({
     isFormValid,
   } = useFormValidation({ showPasswordConfirmation });
 
+  const [selectedGroup, setSelectedGroup] = useState("");
+  const [groupError, setGroupError] = useState("");
+
+  const handleGroupChange = (event: any) => {
+    const value = event.target.value;
+    setSelectedGroup(value);
+    if (value) {
+      setGroupError("");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Валидация группы если требуется
+    if (showGroupSelection && !selectedGroup) {
+      setGroupError("Выберите группу");
+      return;
+    }
 
     if (!validateAllFields()) return;
 
     await handleClick(
       email,
       password,
-      showPasswordConfirmation ? confirmPassword : undefined
+      showPasswordConfirmation ? confirmPassword : undefined,
+      showGroupSelection ? selectedGroup : undefined
     );
   };
+
+  const isFormValidWithGroup = showGroupSelection 
+    ? isFormValid && selectedGroup && !groupError
+    : isFormValid;
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" p={2.5}>
@@ -258,11 +331,27 @@ const Form = ({
                 variant="outlined"
               />
             )}
+
+            {showGroupSelection && (
+              <StyledFormControl fullWidth error={!!groupError}>
+                <InputLabel>Группа</InputLabel>
+                <StyledSelect
+                  value={selectedGroup}
+                  onChange={handleGroupChange}
+                  label="Группа"
+                  disabled={isLoading}
+                >
+                  <MenuItem value="group-301">Группа-301</MenuItem>
+                  <MenuItem value="group-302">Группа-302</MenuItem>
+                </StyledSelect>
+                <FormHelperText>{groupError || " "}</FormHelperText>
+              </StyledFormControl>
+            )}
           </Box>
 
           <SubmitButton
             type="submit"
-            disabled={isLoading || !isFormValid}
+            disabled={isLoading || !isFormValidWithGroup}
             fullWidth
             size="large"
           >

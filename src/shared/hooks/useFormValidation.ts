@@ -7,10 +7,12 @@ import {
 
 interface UseFormValidationProps {
   showPasswordConfirmation?: boolean;
+  showGroupSelection?: boolean;
 }
 
 export const useFormValidation = ({
   showPasswordConfirmation = false,
+  showGroupSelection = false,
 }: UseFormValidationProps = {}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

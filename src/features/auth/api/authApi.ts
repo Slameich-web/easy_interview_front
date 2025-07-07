@@ -12,6 +12,7 @@ import { createUserInFirestore } from "./firestoreApi";
 export interface AuthCredentials {
   email: string;
   password: string;
+  groupId?: string;
 }
 
 export interface AuthResult {
@@ -38,12 +39,13 @@ export const signIn = async ({
 export const signUp = async ({
   email,
   password,
+  groupId,
 }: AuthCredentials): Promise<AuthResult> => {
   try {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     
     // Создаем пользователя в Firestore после успешной регистрации
-    await createUserInFirestore(result.user.uid, email);
+    await createUserInFirestore(result.user.uid, email, groupId);
     
     return { user: result.user };
   } catch (error) {

@@ -51,7 +51,7 @@ const generateStudentId = async (): Promise<string> => {
 export const createUserInFirestore = async (
   uid: string,
   email: string,
-  groupId: string = "group_fe2024",
+  groupId?: string,
   role: "student" | "teacher" = "student"
 ): Promise<void> => {
   try {
@@ -71,7 +71,7 @@ export const createUserInFirestore = async (
     const userData: UserData = {
       email,
       studentId,
-      groupId,
+      groupId: groupId || "group_fe2024", // Fallback на дефолтную группу
       createdAt: Timestamp.now(),
       role,
     };
