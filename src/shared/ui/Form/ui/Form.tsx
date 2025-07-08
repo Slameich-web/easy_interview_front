@@ -230,23 +230,52 @@ const Form = ({
   const [selectedGroup, setSelectedGroup] = useState("");
   const [groupError, setGroupError] = useState("");
   const [studentNumber, setStudentNumber] = useState("");
+  const [studentNumberError, setStudentNumberError] = useState("");
 
   const handleGroupChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value;
     setSelectedGroup(value);
-    if (value) {
+    if (value || !isStudentRegistration) {
       setGroupError("");
+    } else if (isStudentRegistration && !value) {
+      setGroupError("Выбор группы обязателен");
     }
   };
 
   const handleStudentNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStudentNumber(event.target.value);
+    const value = event.target.value;
+    setStudentNumber(value);
+    
+    if (isStudentRegistration) {
+      if (!value.trim()) {
+        setStudentNumberError("Номер студенческого билета обязателен");
+      } else {
+        setStudentNumberError("");
+      }
+    }
   };
 
+  const validateStudentFields = () => {
+    if (!isStudentRegistration) return true;
+    
+    let isValid = true;
+    
+    if (!studentNumber.trim()) {
+      setStudentNumberError("Номер студенческого билета обязателен");
+      isValid = false;
+    }
+    
+    if (!selectedGroup) {
+      setGroupError("Выбор группы обязателен");
+      isValid = false;
+    }
+    
+    return isValid;
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateAllFields()) return;
+    if (!validateAllFields() || !validateStudentFields()) return;
 
     await handleClick(
       email,
@@ -257,7 +286,8 @@ const Form = ({
     );
   };
 
-  const isFormValidWithGroup = isFormValid;
+  const isFormValidWithGroup = isFormValid && 
+    (!isStudentRegistration || (selectedGroup && studentNumber.trim() && !studentNumberError && !groupError));
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" p={2.5}>
@@ -347,25 +377,29 @@ const Form = ({
                   type="text"
                   value={studentNumber}
                   onChange={handleStudentNumberChange}
-                  placeholder="Номер студенческого билета (необязательно)"
+                  placeholder="Номер студенческого билета *"
                   disabled={isLoading}
+                  error={!!studentNumberError}
+                  helperText={studentNumberError || "Например: 20240301001"}
                   fullWidth
                   variant="outlined"
-                  helperText="Например: 20240301001"
                 />
 
               <StyledFormControl fullWidth>
-                <InputLabel>Группа (необязательно)</InputLabel>
+                <InputLabel error={!!groupError}>Группа *</InputLabel>
                 <StyledSelect
                   value={selectedGroup}
                   onChange={handleGroupChange}
-                  label="Группа (необязательно)"
+                  label="Группа *"
                   disabled={isLoading}
+                  error={!!groupError}
                 >
                   <MenuItem value="group-301">Группа-301</MenuItem>
                   <MenuItem value="group-302">Группа-302</MenuItem>
                 </StyledSelect>
-                <FormHelperText>Выберите группу при необходимости</FormHelperText>
+                <FormHelperText error={!!groupError}>
+                  {groupError || "Выберите вашу группу"}
+                </FormHelperText>
               </StyledFormControl>
               </>
             )}

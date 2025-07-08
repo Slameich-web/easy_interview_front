@@ -51,13 +51,14 @@ export const RegisterForm = ({ isStudentRegistration = false }: RegisterFormProp
 
   return (
     <Form
-      title="Регистрация"
+      title={isStudentRegistration ? "Регистрация студента" : "Регистрация"}
       buttonTitle="Зарегистрироваться"
       handleClick={handleRegister}
       isLoading={isLoading}
       error={error}
       showPasswordConfirmation={true}
       showGroupSelection={isStudentRegistration}
+      isStudentRegistration={isStudentRegistration}
     />
   );
 };
