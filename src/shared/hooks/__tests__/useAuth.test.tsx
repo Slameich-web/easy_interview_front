@@ -17,6 +17,7 @@ const createMockStore = (initialState = {}) => {
         id: null,
         isLoading: false,
         error: null,
+        userData: null,
         ...initialState,
       },
     },

@@ -14,6 +14,7 @@ describe("authSlice", () => {
     id: null,
     isLoading: false,
     error: null,
+    userData: null,
   };
 
   it("should return the initial state", () => {
@@ -94,6 +95,7 @@ describe("authSlice", () => {
         id: "user-123",
         isLoading: true,
         error: "Some error",
+        userData: null,
       };
 
       const actual = authReducer(previousState, removeUser());
