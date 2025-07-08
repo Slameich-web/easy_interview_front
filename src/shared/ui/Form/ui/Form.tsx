@@ -5,7 +5,14 @@ import { LoadingSpinner } from "../../LoadingSpinner";
 import { Card } from "../../Card";
 import Button from "../../Button";
 import { useFormValidation } from "../../../hooks/useFormValidation";
-import { MenuItem, Select, FormControl, InputLabel, FormHelperText } from "@mui/material";
+import {
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  FormHelperText,
+} from "@mui/material";
+import { useState } from "react";
 
 const StyledTextField = styled(TextField)({
   "& .MuiOutlinedInput-root": {
@@ -246,7 +253,7 @@ const Form = ({
     );
   };
 
-  const isFormValidWithGroup = showGroupSelection 
+  const isFormValidWithGroup = showGroupSelection
     ? isFormValid && selectedGroup && !groupError
     : isFormValid;
 
