@@ -79,7 +79,10 @@ const LoginPage = () => {
 
       <LoginForm />
 
-      <StyledLink to="/register">Нет аккаунта? Зарегистрироваться</StyledLink>
+      <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+        <StyledLink to="/register">Нет аккаунта? Зарегистрироваться</StyledLink>
+        <StyledLink to="/registerStudent">Регистрация студента</StyledLink>
+      </Box>
     </PageContainer>
   );
 };

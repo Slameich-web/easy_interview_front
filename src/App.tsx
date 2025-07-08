@@ -75,6 +75,7 @@ function App() {
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/registerStudent" element={<RegisterPage isStudentRegistration={true} />} />
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<MainPage />} />

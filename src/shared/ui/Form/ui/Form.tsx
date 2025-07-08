@@ -200,6 +200,7 @@ interface FormProps {
   error?: string | null;
   showPasswordConfirmation?: boolean;
   showGroupSelection?: boolean;
+  isStudentRegistration?: boolean;
 }
 
 const Form = ({
@@ -210,6 +211,7 @@ const Form = ({
   error,
   showPasswordConfirmation = false,
   showGroupSelection = false,
+  isStudentRegistration = false,
 }: FormProps) => {
   const {
     email,

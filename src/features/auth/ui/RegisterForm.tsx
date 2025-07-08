@@ -5,7 +5,11 @@ import { setLoading, setError, setUser } from "../model/authSlice";
 import { selectAuthLoading, selectAuthError } from "../model/selectors";
 import { signUp } from "../api/authApi";
 
-export const RegisterForm = () => {
+interface RegisterFormProps {
+  isStudentRegistration?: boolean;
+}
+
+export const RegisterForm = ({ isStudentRegistration = false }: RegisterFormProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoading = useSelector(selectAuthLoading);
@@ -53,7 +57,7 @@ export const RegisterForm = () => {
       isLoading={isLoading}
       error={error}
       showPasswordConfirmation={true}
-      showGroupSelection={true}
+      showGroupSelection={isStudentRegistration}
     />
   );
 };

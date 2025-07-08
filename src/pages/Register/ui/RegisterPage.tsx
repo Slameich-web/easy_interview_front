@@ -48,7 +48,11 @@ const StyledLink = styled(Link)({
   },
 });
 
-const RegisterPage = () => {
+interface RegisterPageProps {
+  isStudentRegistration?: boolean;
+}
+
+const RegisterPage = ({ isStudentRegistration = false }: RegisterPageProps) => {
   return (
     <PageContainer>
       <Box textAlign="center">
@@ -61,7 +65,7 @@ const RegisterPage = () => {
             fontWeight: 600,
           }}
         >
-          Создать аккаунт
+          {isStudentRegistration ? "Регистрация студента" : "Создать аккаунт"}
         </Typography>
         <Typography
           variant="body1"
@@ -73,13 +77,24 @@ const RegisterPage = () => {
             fontWeight: 600,
           }}
         >
-          Присоединяйтесь к нам уже сегодня
+          {isStudentRegistration 
+            ? "Заполните данные для регистрации в системе" 
+            : "Присоединяйтесь к нам уже сегодня"
+          }
         </Typography>
       </Box>
 
-      <RegisterForm />
+      <RegisterForm isStudentRegistration={isStudentRegistration} />
 
-      <StyledLink to="/login">Уже есть аккаунт? Войти</StyledLink>
+      <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+        <StyledLink to="/login">Уже есть аккаунт? Войти</StyledLink>
+        {!isStudentRegistration && (
+          <StyledLink to="/registerStudent">Регистрация студента</StyledLink>
+        )}
+        {isStudentRegistration && (
+          <StyledLink to="/register">Обычная регистрация</StyledLink>
+        )}
+      </Box>
     </PageContainer>
   );
 };
