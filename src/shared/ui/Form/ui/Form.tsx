@@ -8,6 +8,7 @@ import { useFormValidation } from "../../../hooks/useFormValidation";
 import {
   MenuItem,
   Select,
+  SelectChangeEvent,
   FormControl,
   InputLabel,
   FormHelperText,
@@ -225,13 +226,28 @@ const Form = ({
 
   const [selectedGroup, setSelectedGroup] = useState("");
   const [groupError, setGroupError] = useState("");
+  const [selectedRole, setSelectedRole] = useState<"student" | "teacher">("student");
+  const [studentNumber, setStudentNumber] = useState("");
 
-  const handleGroupChange = (event: any) => {
+  const handleGroupChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value;
     setSelectedGroup(value);
     if (value) {
       setGroupError("");
     }
+  };
+
+  const handleRoleChange = (event: SelectChangeEvent<string>) => {
+    const value = event.target.value as "student" | "teacher";
+    setSelectedRole(value);
+    // Очищаем номер студента при переключении на преподавателя
+    if (value === "teacher") {
+      setStudentNumber("");
+    }
+  };
+
+  const handleStudentNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStudentNumber(event.target.value);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -249,7 +265,9 @@ const Form = ({
       email,
       password,
       showPasswordConfirmation ? confirmPassword : undefined,
-      showGroupSelection ? selectedGroup : undefined
+      showGroupSelection ? selectedGroup : undefined,
+      showGroupSelection ? studentNumber : undefined,
+      showGroupSelection ? selectedRole : undefined
     );
   };
 
@@ -340,6 +358,34 @@ const Form = ({
             )}
 
             {showGroupSelection && (
+              <>
+                <StyledFormControl fullWidth>
+                  <InputLabel>Роль</InputLabel>
+                  <StyledSelect
+                    value={selectedRole}
+                    onChange={handleRoleChange}
+                    label="Роль"
+                    disabled={isLoading}
+                  >
+                    <MenuItem value="student">👨‍🎓 Студент</MenuItem>
+                    <MenuItem value="teacher">👨‍🏫 Преподаватель</MenuItem>
+                  </StyledSelect>
+                  <FormHelperText> </FormHelperText>
+                </StyledFormControl>
+
+                {selectedRole === "student" && (
+                  <StyledTextField
+                    type="text"
+                    value={studentNumber}
+                    onChange={handleStudentNumberChange}
+                    placeholder="Номер студенческого билета (необязательно)"
+                    disabled={isLoading}
+                    fullWidth
+                    variant="outlined"
+                    helperText="Например: 20240301001"
+                  />
+                )}
+
               <StyledFormControl fullWidth error={!!groupError}>
                 <InputLabel>Группа</InputLabel>
                 <StyledSelect
@@ -353,6 +399,7 @@ const Form = ({
                 </StyledSelect>
                 <FormHelperText>{groupError || " "}</FormHelperText>
               </StyledFormControl>
+              </>
             )}
           </Box>
 
