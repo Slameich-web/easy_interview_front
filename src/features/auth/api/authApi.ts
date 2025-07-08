@@ -13,6 +13,8 @@ export interface AuthCredentials {
   email: string;
   password: string;
   groupId?: string;
+  studentNumber?: string;
+  role?: "student" | "teacher";
 }
 
 export interface AuthResult {
@@ -40,12 +42,14 @@ export const signUp = async ({
   email,
   password,
   groupId,
+  studentNumber,
+  role,
 }: AuthCredentials): Promise<AuthResult> => {
   try {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     
     // Создаем пользователя в Firestore после успешной регистрации
-    await createUserInFirestore(result.user.uid, email, groupId);
+    await createUserInFirestore(result.user.uid, email, groupId, role, studentNumber);
     
     return { user: result.user };
   } catch (error) {

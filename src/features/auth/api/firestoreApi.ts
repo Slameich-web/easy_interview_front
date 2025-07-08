@@ -14,6 +14,7 @@ import { db } from "../../../firebase";
 export interface UserData {
   email: string;
   studentId: string;
+  studentNumber?: string;
   groupId: string;
   createdAt: Timestamp;
   role?: "student" | "teacher";
@@ -52,7 +53,8 @@ export const createUserInFirestore = async (
   uid: string,
   email: string,
   groupId?: string,
-  role: "student" | "teacher" = "student"
+  role: "student" | "teacher" = "student",
+  studentNumber?: string
 ): Promise<void> => {
   try {
     // Проверяем, существует ли уже пользователь
@@ -71,6 +73,7 @@ export const createUserInFirestore = async (
     const userData: UserData = {
       email,
       studentId,
+      studentNumber: studentNumber || undefined,
       groupId: groupId || "group_fe2024", // Fallback на дефолтную группу
       createdAt: Timestamp.now(),
       role,

@@ -11,11 +11,24 @@ export const RegisterForm = () => {
   const isLoading = useSelector(selectAuthLoading);
   const error = useSelector(selectAuthError);
 
-  const handleRegister = async (email: string, password: string) => {
+  const handleRegister = async (
+    email: string, 
+    password: string, 
+    confirmPassword?: string,
+    groupId?: string,
+    studentNumber?: string,
+    role?: "student" | "teacher"
+  ) => {
     dispatch(setLoading(true));
 
     try {
-      const { user } = await signUp({ email, password, groupId });
+      const { user } = await signUp({ 
+        email, 
+        password, 
+        groupId,
+        studentNumber,
+        role 
+      });
 
       dispatch(
         setUser({
