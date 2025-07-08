@@ -1,52 +1,13 @@
 import { 
-  collection, 
-  addDoc, 
   doc, 
   setDoc, 
   getDoc,
-  query,
-  where,
-  getDocs,
   Timestamp 
 } from "firebase/firestore";
 import { db } from "../../../firebase";
-
-export interface UserData {
-  email: string;
-  studentId: string;
-  studentNumber?: string;
-  groupId: string;
-  createdAt: Timestamp;
-  role?: "student" | "teacher";
-}
-
-// Генерация уникального студенческого ID
-const generateStudentId = async (): Promise<string> => {
-  const currentYear = new Date().getFullYear();
-  const baseId = `ST-${currentYear}-`;
-  
-  // Получаем всех пользователей с ID текущего года
-  const usersRef = collection(db, "users");
-  const q = query(usersRef, where("studentId", ">=", baseId), where("studentId", "<", `ST-${currentYear + 1}-`));
-  const querySnapshot = await getDocs(q);
-  
-  // Находим максимальный номер
-  let maxNumber = 0;
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    const idParts = data.studentId.split("-");
-    if (idParts.length === 3) {
-      const number = parseInt(idParts[2], 10);
-      if (number > maxNumber) {
-        maxNumber = number;
-      }
-    }
-  });
-  
-  // Генерируем новый ID
-  const newNumber = maxNumber + 1;
-  return `${baseId}${newNumber.toString().padStart(3, "0")}`;
-};
+import { UserData } from "../../../shared/types/user";
+import { generateStudentId } from "../../../shared/utils/studentIdGenerator";
+import { DEFAULT_GROUP } from "../../../shared/constants/groups";
 
 // Создание пользователя в Firestore
 export const createUserInFirestore = async (
@@ -74,7 +35,7 @@ export const createUserInFirestore = async (
       email,
       studentId,
       studentNumber: studentNumber || undefined,
-      groupId: groupId || "Без группы", // Fallback если группа не выбрана
+      groupId: groupId || DEFAULT_GROUP,
       createdAt: Timestamp.now(),
       role,
     };

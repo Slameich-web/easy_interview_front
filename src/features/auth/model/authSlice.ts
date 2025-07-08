@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserData } from "../api/firestoreApi";
+import { UserData } from "../../../shared/types/user";
 
 export interface AuthState {
   email: string | null;

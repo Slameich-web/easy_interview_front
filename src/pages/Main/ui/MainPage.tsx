@@ -1,19 +1,17 @@
 import { Typography, Box, CardContent } from "@mui/material";
 import { useAuth } from "../../../shared/hooks/useAuth";
-import { LogoutButton, selectUserData } from "../../../features/auth";
+import { LogoutButton } from "../../../features/auth";
 import { LoadingSpinner } from "../../../shared/ui/LoadingSpinner";
 import { Container } from "../../../shared/ui/Container";
 import { AppBar } from "../../../shared/ui/AppBar";
 import { Toolbar } from "../../../shared/ui/Toolbar";
 import { Card } from "../../../shared/ui/Card";
 import { Grid } from "../../../shared/ui/Grid";
-import { Chip } from "../../../shared/ui/Chip";
+import { UserChips } from "../../../shared/ui/UserChips";
 import Button from "../../../shared/ui/Button";
-import { useSelector } from "react-redux";
 
 const MainPage = () => {
-  const { isAuth, email } = useAuth();
-  const userData = useSelector(selectUserData);
+  const { isAuth, email, userData } = useAuth();
 
   if (!isAuth) {
     return (
@@ -73,38 +71,7 @@ const MainPage = () => {
           </Typography>
 
           <Box display="flex" alignItems="center" gap={2}>
-            <Box display="flex" alignItems="center" gap={1}>
-              <Chip label={email} />
-              {userData && (
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Chip 
-                    label={`👨‍🎓 ${userData.studentId}`} 
-                    sx={{ 
-                      backgroundColor: "rgba(76, 175, 80, 0.2)",
-                      borderColor: "rgba(76, 175, 80, 0.5)"
-                    }}
-                  />
-                  {userData.groupId && userData.groupId !== "Без группы" && (
-                    <Chip 
-                      label={userData.groupId} 
-                      sx={{ 
-                        backgroundColor: "rgba(255, 152, 0, 0.2)",
-                        borderColor: "rgba(255, 152, 0, 0.5)"
-                      }}
-                    />
-                  )}
-                  {userData.studentNumber && (
-                    <Chip 
-                      label={`№ ${userData.studentNumber}`} 
-                      sx={{ 
-                        backgroundColor: "rgba(156, 39, 176, 0.2)",
-                        borderColor: "rgba(156, 39, 176, 0.5)"
-                      }}
-                    />
-                  )}
-                </Box>
-              )}
-            </Box>
+            <UserChips email={email!} userData={userData} />
             <LogoutButton />
           </Box>
         </Toolbar>

@@ -3,23 +3,12 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
-  User,
   setPersistence,
   browserLocalPersistence,
 } from "firebase/auth";
+import { AuthCredentials, AuthResult } from "../../../shared/types/user";
 import { createUserInFirestore } from "./firestoreApi";
 
-export interface AuthCredentials {
-  email: string;
-  password: string;
-  groupId?: string;
-  studentNumber?: string;
-  role?: "student" | "teacher";
-}
-
-export interface AuthResult {
-  user: User;
-}
 const auth = getAuth();
 
 setPersistence(auth, browserLocalPersistence);
@@ -27,7 +16,7 @@ setPersistence(auth, browserLocalPersistence);
 export const signIn = async ({
   email,
   password,
-}: AuthCredentials): Promise<AuthResult> => {
+}: Pick<AuthCredentials, 'email' | 'password'>): Promise<AuthResult> => {
   try {
     const result = await signInWithEmailAndPassword(auth, email, password);
     return { user: result.user };
@@ -43,7 +32,7 @@ export const signUp = async ({
   password,
   groupId,
   studentNumber,
-  role,
+  role = "student",
 }: AuthCredentials): Promise<AuthResult> => {
   try {
     const result = await createUserWithEmailAndPassword(auth, email, password);

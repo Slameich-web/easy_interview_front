@@ -5,15 +5,8 @@ import { LoadingSpinner } from "../../LoadingSpinner";
 import { Card } from "../../Card";
 import Button from "../../Button";
 import { useFormValidation } from "../../../hooks/useFormValidation";
-import {
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  FormControl,
-  InputLabel,
-  FormHelperText,
-} from "@mui/material";
-import { useState } from "react";
+import { useStudentForm } from "../../../hooks/useStudentForm";
+import { StudentFields } from "../../StudentFields";
 
 const StyledTextField = styled(TextField)({
   "& .MuiOutlinedInput-root": {
@@ -48,53 +41,6 @@ const StyledTextField = styled(TextField)({
   },
   "& .MuiOutlinedInput-input": {
     padding: "18px 24px",
-    color: "#2c3e50",
-  },
-  "& .MuiFormHelperText-root": {
-    marginTop: "6px",
-    fontSize: "13px",
-    fontWeight: 500,
-    textShadow: "0 1px 2px rgba(0, 0, 0, 0.1)",
-  },
-  "& .MuiFormHelperText-root.Mui-error": {
-    color: "#f44336",
-  },
-});
-
-const StyledSelect = styled(Select)({
-  backgroundColor: "rgba(255, 255, 255, 0.95)",
-  borderRadius: "16px",
-  fontSize: "16px",
-  fontWeight: 500,
-  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-  "& .MuiOutlinedInput-notchedOutline": {
-    borderColor: "rgba(255, 255, 255, 0.3)",
-    borderWidth: "2px",
-  },
-  "&:hover .MuiOutlinedInput-notchedOutline": {
-    borderColor: "rgba(255, 255, 255, 0.5)",
-  },
-  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#ffffff",
-    boxShadow:
-      "0 0 0 4px rgba(255, 255, 255, 0.3), 0 8px 25px rgba(0, 0, 0, 0.15)",
-  },
-  "&.Mui-focused": {
-    backgroundColor: "#ffffff",
-    transform: "translateY(-2px)",
-  },
-  "& .MuiSelect-select": {
-    padding: "18px 24px",
-    color: "#2c3e50",
-  },
-});
-
-const StyledFormControl = styled(FormControl)({
-  "& .MuiInputLabel-root": {
-    color: "#7f8c8d",
-    fontWeight: 400,
-  },
-  "& .MuiInputLabel-root.Mui-focused": {
     color: "#2c3e50",
   },
   "& .MuiFormHelperText-root": {
@@ -227,51 +173,17 @@ const Form = ({
     isFormValid,
   } = useFormValidation({ showPasswordConfirmation });
 
-  const [selectedGroup, setSelectedGroup] = useState("");
-  const [groupError, setGroupError] = useState("");
-  const [studentNumber, setStudentNumber] = useState("");
-  const [studentNumberError, setStudentNumberError] = useState("");
+  const {
+    selectedGroup,
+    studentNumber,
+    groupError,
+    studentNumberError,
+    handleGroupChange,
+    handleStudentNumberChange,
+    validateStudentFields,
+    isStudentFormValid,
+  } = useStudentForm({ isRequired: isStudentRegistration });
 
-  const handleGroupChange = (event: SelectChangeEvent<string>) => {
-    const value = event.target.value;
-    setSelectedGroup(value);
-    if (value || !isStudentRegistration) {
-      setGroupError("");
-    } else if (isStudentRegistration && !value) {
-      setGroupError("Выбор группы обязателен");
-    }
-  };
-
-  const handleStudentNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setStudentNumber(value);
-    
-    if (isStudentRegistration) {
-      if (!value.trim()) {
-        setStudentNumberError("Номер студенческого билета обязателен");
-      } else {
-        setStudentNumberError("");
-      }
-    }
-  };
-
-  const validateStudentFields = () => {
-    if (!isStudentRegistration) return true;
-    
-    let isValid = true;
-    
-    if (!studentNumber.trim()) {
-      setStudentNumberError("Номер студенческого билета обязателен");
-      isValid = false;
-    }
-    
-    if (!selectedGroup) {
-      setGroupError("Выбор группы обязателен");
-      isValid = false;
-    }
-    
-    return isValid;
-  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -286,8 +198,7 @@ const Form = ({
     );
   };
 
-  const isFormValidWithGroup = isFormValid && 
-    (!isStudentRegistration || (selectedGroup && studentNumber.trim() && !studentNumberError && !groupError));
+  const isFormValidWithGroup = isFormValid && isStudentFormValid;
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" p={2.5}>
@@ -372,36 +283,16 @@ const Form = ({
             )}
 
             {showGroupSelection && (
-              <>
-                <StyledTextField
-                  type="text"
-                  value={studentNumber}
-                  onChange={handleStudentNumberChange}
-                  placeholder="Номер студенческого билета *"
-                  disabled={isLoading}
-                  error={!!studentNumberError}
-                  helperText={studentNumberError || "Например: 20240301001"}
-                  fullWidth
-                  variant="outlined"
-                />
-
-              <StyledFormControl fullWidth>
-                <InputLabel error={!!groupError}>Группа *</InputLabel>
-                <StyledSelect
-                  value={selectedGroup}
-                  onChange={handleGroupChange}
-                  label="Группа *"
-                  disabled={isLoading}
-                  error={!!groupError}
-                >
-                  <MenuItem value="group-301">Группа-301</MenuItem>
-                  <MenuItem value="group-302">Группа-302</MenuItem>
-                </StyledSelect>
-                <FormHelperText error={!!groupError}>
-                  {groupError || "Выберите вашу группу"}
-                </FormHelperText>
-              </StyledFormControl>
-              </>
+              <StudentFields
+                studentNumber={studentNumber}
+                selectedGroup={selectedGroup}
+                studentNumberError={studentNumberError}
+                groupError={groupError}
+                onStudentNumberChange={handleStudentNumberChange}
+                onGroupChange={handleGroupChange}
+                disabled={isLoading}
+                isRequired={isStudentRegistration}
+              />
             )}
           </Box>
 
