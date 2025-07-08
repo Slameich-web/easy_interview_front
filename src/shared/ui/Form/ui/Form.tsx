@@ -192,7 +192,8 @@ interface FormProps {
     email: string,
     password: string,
     confirmPassword?: string,
-    groupId?: string
+    groupId?: string,
+    studentNumber?: string
   ) => Promise<void>;
   buttonTitle: string;
   isLoading?: boolean;
@@ -226,7 +227,6 @@ const Form = ({
 
   const [selectedGroup, setSelectedGroup] = useState("");
   const [groupError, setGroupError] = useState("");
-  const [selectedRole, setSelectedRole] = useState<"student" | "teacher">("student");
   const [studentNumber, setStudentNumber] = useState("");
 
   const handleGroupChange = (event: SelectChangeEvent<string>) => {
@@ -237,27 +237,12 @@ const Form = ({
     }
   };
 
-  const handleRoleChange = (event: SelectChangeEvent<string>) => {
-    const value = event.target.value as "student" | "teacher";
-    setSelectedRole(value);
-    // Очищаем номер студента при переключении на преподавателя
-    if (value === "teacher") {
-      setStudentNumber("");
-    }
-  };
-
   const handleStudentNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStudentNumber(event.target.value);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Валидация группы если требуется
-    if (showGroupSelection && !selectedGroup) {
-      setGroupError("Выберите группу");
-      return;
-    }
 
     if (!validateAllFields()) return;
 
@@ -266,14 +251,11 @@ const Form = ({
       password,
       showPasswordConfirmation ? confirmPassword : undefined,
       showGroupSelection ? selectedGroup : undefined,
-      showGroupSelection ? studentNumber : undefined,
-      showGroupSelection ? selectedRole : undefined
+      showGroupSelection ? studentNumber : undefined
     );
   };
 
-  const isFormValidWithGroup = showGroupSelection
-    ? isFormValid && selectedGroup && !groupError
-    : isFormValid;
+  const isFormValidWithGroup = isFormValid;
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" p={2.5}>
@@ -359,45 +341,29 @@ const Form = ({
 
             {showGroupSelection && (
               <>
-                <StyledFormControl fullWidth>
-                  <InputLabel>Роль</InputLabel>
-                  <StyledSelect
-                    value={selectedRole}
-                    onChange={handleRoleChange}
-                    label="Роль"
-                    disabled={isLoading}
-                  >
-                    <MenuItem value="student">👨‍🎓 Студент</MenuItem>
-                    <MenuItem value="teacher">👨‍🏫 Преподаватель</MenuItem>
-                  </StyledSelect>
-                  <FormHelperText> </FormHelperText>
-                </StyledFormControl>
+                <StyledTextField
+                  type="text"
+                  value={studentNumber}
+                  onChange={handleStudentNumberChange}
+                  placeholder="Номер студенческого билета (необязательно)"
+                  disabled={isLoading}
+                  fullWidth
+                  variant="outlined"
+                  helperText="Например: 20240301001"
+                />
 
-                {selectedRole === "student" && (
-                  <StyledTextField
-                    type="text"
-                    value={studentNumber}
-                    onChange={handleStudentNumberChange}
-                    placeholder="Номер студенческого билета (необязательно)"
-                    disabled={isLoading}
-                    fullWidth
-                    variant="outlined"
-                    helperText="Например: 20240301001"
-                  />
-                )}
-
-              <StyledFormControl fullWidth error={!!groupError}>
-                <InputLabel>Группа</InputLabel>
+              <StyledFormControl fullWidth>
+                <InputLabel>Группа (необязательно)</InputLabel>
                 <StyledSelect
                   value={selectedGroup}
                   onChange={handleGroupChange}
-                  label="Группа"
+                  label="Группа (необязательно)"
                   disabled={isLoading}
                 >
                   <MenuItem value="group-301">Группа-301</MenuItem>
                   <MenuItem value="group-302">Группа-302</MenuItem>
                 </StyledSelect>
-                <FormHelperText>{groupError || " "}</FormHelperText>
+                <FormHelperText>Выберите группу при необходимости</FormHelperText>
               </StyledFormControl>
               </>
             )}

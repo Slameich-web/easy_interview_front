@@ -16,8 +16,7 @@ export const RegisterForm = () => {
     password: string, 
     confirmPassword?: string,
     groupId?: string,
-    studentNumber?: string,
-    role?: "student" | "teacher"
+    studentNumber?: string
   ) => {
     dispatch(setLoading(true));
 
@@ -27,7 +26,7 @@ export const RegisterForm = () => {
         password, 
         groupId,
         studentNumber,
-        role 
+        role: "student" // Все пользователи по умолчанию студенты
       });
 
       dispatch(

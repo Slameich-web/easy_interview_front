@@ -74,7 +74,7 @@ export const createUserInFirestore = async (
       email,
       studentId,
       studentNumber: studentNumber || undefined,
-      groupId: groupId || "group_fe2024", // Fallback на дефолтную группу
+      groupId: groupId || "Без группы", // Fallback если группа не выбрана
       createdAt: Timestamp.now(),
       role,
     };

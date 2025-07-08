@@ -78,23 +78,21 @@ const MainPage = () => {
               {userData && (
                 <Box display="flex" alignItems="center" gap={1}>
                   <Chip 
-                    label={`${userData.role === 'student' ? '👨‍🎓' : '👨‍🏫'} ${userData.studentId}`} 
+                    label={`👨‍🎓 ${userData.studentId}`} 
                     sx={{ 
-                      backgroundColor: userData.role === 'student' 
-                        ? "rgba(76, 175, 80, 0.2)" 
-                        : "rgba(63, 81, 181, 0.2)",
-                      borderColor: userData.role === 'student' 
-                        ? "rgba(76, 175, 80, 0.5)" 
-                        : "rgba(63, 81, 181, 0.5)"
+                      backgroundColor: "rgba(76, 175, 80, 0.2)",
+                      borderColor: "rgba(76, 175, 80, 0.5)"
                     }}
                   />
-                  <Chip 
-                    label={userData.groupId} 
-                    sx={{ 
-                      backgroundColor: "rgba(255, 152, 0, 0.2)",
-                      borderColor: "rgba(255, 152, 0, 0.5)"
-                    }}
-                  />
+                  {userData.groupId && userData.groupId !== "Без группы" && (
+                    <Chip 
+                      label={userData.groupId} 
+                      sx={{ 
+                        backgroundColor: "rgba(255, 152, 0, 0.2)",
+                        borderColor: "rgba(255, 152, 0, 0.5)"
+                      }}
+                    />
+                  )}
                   {userData.studentNumber && (
                     <Chip 
                       label={`№ ${userData.studentNumber}`} 
