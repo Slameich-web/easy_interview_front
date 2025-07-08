@@ -14,28 +14,28 @@ export const UserChips = ({ email, userData }: UserChipsProps) => {
       <Chip label={email} />
       {userData && (
         <Box display="flex" alignItems="center" gap={1}>
-          <Chip 
-            label={`👨‍🎓 ${userData.studentId}`} 
-            sx={{ 
+          <Chip
+            label={`👨‍🎓 ${userData.studentId}`}
+            sx={{
               backgroundColor: "rgba(76, 175, 80, 0.2)",
-              borderColor: "rgba(76, 175, 80, 0.5)"
+              borderColor: "rgba(76, 175, 80, 0.5)",
             }}
           />
           {userData.groupId && userData.groupId !== DEFAULT_GROUP && (
-            <Chip 
-              label={userData.groupId} 
-              sx={{ 
+            <Chip
+              label={userData.groupId}
+              sx={{
                 backgroundColor: "rgba(255, 152, 0, 0.2)",
-                borderColor: "rgba(255, 152, 0, 0.5)"
+                borderColor: "rgba(255, 152, 0, 0.5)",
               }}
             />
           )}
           {userData.studentNumber && (
-            <Chip 
-              label={`№ ${userData.studentNumber}`} 
-              sx={{ 
+            <Chip
+              label={`№ ${userData.studentNumber}`}
+              sx={{
                 backgroundColor: "rgba(156, 39, 176, 0.2)",
-                borderColor: "rgba(156, 39, 176, 0.5)"
+                borderColor: "rgba(156, 39, 176, 0.5)",
               }}
             />
           )}

@@ -8,7 +8,6 @@ import { Box, Typography } from "@mui/material";
 
 export const LogoutButton = () => {
   const dispatch = useDispatch();
-  //const navigate = useNavigate();
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -17,7 +16,6 @@ export const LogoutButton = () => {
     try {
       await logout();
       dispatch(removeUser());
-      //navigate('/login')
     } catch (error) {
       console.error("Ошибка при выходе:", error);
     } finally {

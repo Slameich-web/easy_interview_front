@@ -77,10 +77,9 @@ const RegisterPage = ({ isStudentRegistration = false }: RegisterPageProps) => {
             fontWeight: 600,
           }}
         >
-          {isStudentRegistration 
-            ? "Заполните данные для регистрации в системе" 
-            : "Присоединяйтесь к нам уже сегодня"
-          }
+          {isStudentRegistration
+            ? "Заполните данные для регистрации в системе"
+            : "Присоединяйтесь к нам уже сегодня"}
         </Typography>
       </Box>
 

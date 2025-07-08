@@ -9,28 +9,29 @@ interface RegisterFormProps {
   isStudentRegistration?: boolean;
 }
 
-export const RegisterForm = ({ isStudentRegistration = false }: RegisterFormProps) => {
+export const RegisterForm = ({
+  isStudentRegistration = false,
+}: RegisterFormProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoading = useSelector(selectAuthLoading);
   const error = useSelector(selectAuthError);
 
   const handleRegister = async (
-    email: string, 
-    password: string, 
-    confirmPassword?: string,
+    email: string,
+    password: string,
     groupId?: string,
     studentNumber?: string
   ) => {
     dispatch(setLoading(true));
 
     try {
-      const { user } = await signUp({ 
-        email, 
-        password, 
+      const { user } = await signUp({
+        email,
+        password,
         groupId,
         studentNumber,
-        role: "student" // Все пользователи по умолчанию студенты
+        role: "student", // Все пользователи по умолчанию студенты
       });
 
       dispatch(
