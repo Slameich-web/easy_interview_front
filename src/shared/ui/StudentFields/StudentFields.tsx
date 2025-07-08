@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { AVAILABLE_GROUPS, STUDENT_NUMBER_PLACEHOLDER } from "../../constants/groups";
+import { AVAILABLE_GROUPS } from "../../constants/groups";
 
 const StyledTextField = styled(TextField)({
   "& .MuiOutlinedInput-root": {
@@ -109,7 +109,7 @@ interface StudentFieldsProps {
   studentNumberError: string;
   groupError: string;
   onStudentNumberChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onGroupChange: (event: SelectChangeEvent<string>) => void;
+  onGroupChange: (event: SelectChangeEvent<unknown>) => void;
   disabled?: boolean;
   isRequired?: boolean;
 }
@@ -130,20 +130,19 @@ export const StudentFields = ({
     <>
       <StyledTextField
         type="text"
+        style={{ height: "86px" }}
         value={studentNumber}
         onChange={onStudentNumberChange}
         placeholder={`Номер студенческого билета${requiredMark}`}
         disabled={disabled}
         error={!!studentNumberError}
-        helperText={studentNumberError || STUDENT_NUMBER_PLACEHOLDER}
+        helperText={studentNumberError}
         fullWidth
         variant="outlined"
       />
 
       <StyledFormControl fullWidth>
-        <InputLabel error={!!groupError}>
-          Группа{requiredMark}
-        </InputLabel>
+        <InputLabel error={!!groupError}>Группа{requiredMark}</InputLabel>
         <StyledSelect
           value={selectedGroup}
           onChange={onGroupChange}
@@ -157,9 +156,7 @@ export const StudentFields = ({
             </MenuItem>
           ))}
         </StyledSelect>
-        <FormHelperText error={!!groupError}>
-          {groupError || "Выберите вашу группу"}
-        </FormHelperText>
+        <FormHelperText error={!!groupError}>{groupError}</FormHelperText>
       </StyledFormControl>
     </>
   );

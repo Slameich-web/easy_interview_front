@@ -6,5 +6,3 @@ export const AVAILABLE_GROUPS = [
 ] as const;
 
 export const DEFAULT_GROUP = "Без группы";
-
-export const STUDENT_NUMBER_PLACEHOLDER = "Например: 20240301001";

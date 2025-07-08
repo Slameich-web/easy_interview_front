@@ -3,7 +3,7 @@ export interface UserData {
   studentId: string;
   studentNumber?: string;
   groupId: string;
-  createdAt: any; // Firestore Timestamp
+  createdAt: string; // Firestore Timestamp
   role?: "student" | "teacher";
 }
 

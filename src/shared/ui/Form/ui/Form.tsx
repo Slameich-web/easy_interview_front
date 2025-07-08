@@ -289,6 +289,8 @@ const Form = ({
                 studentNumberError={studentNumberError}
                 groupError={groupError}
                 onStudentNumberChange={handleStudentNumberChange}
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-ignore
                 onGroupChange={handleGroupChange}
                 disabled={isLoading}
                 isRequired={isStudentRegistration}
