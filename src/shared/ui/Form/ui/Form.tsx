@@ -1,108 +1,11 @@
-import { TextField, Typography, Box } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Typography, Box } from "@mui/material";
 import { ErrorMessage } from "../../ErrorMessage";
 import { LoadingSpinner } from "../../LoadingSpinner";
-import { Card } from "../../Card";
 import Button from "../../Button";
 import { useFormValidation } from "../../../hooks/useFormValidation";
 import { useStudentForm } from "../../../hooks/useStudentForm";
 import { StudentFields } from "../../StudentFields";
-
-const StyledTextField = styled(TextField)({
-  "& .MuiOutlinedInput-root": {
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    borderRadius: "16px",
-    fontSize: "16px",
-    fontWeight: 500,
-    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    "& fieldset": {
-      borderColor: "rgba(255, 255, 255, 0.3)",
-      borderWidth: "2px",
-    },
-    "&:hover fieldset": {
-      borderColor: "rgba(255, 255, 255, 0.5)",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#ffffff",
-      boxShadow:
-        "0 0 0 4px rgba(255, 255, 255, 0.3), 0 8px 25px rgba(0, 0, 0, 0.15)",
-    },
-    "&.Mui-focused": {
-      backgroundColor: "#ffffff",
-      transform: "translateY(-2px)",
-    },
-  },
-  "& .MuiInputLabel-root": {
-    color: "#7f8c8d",
-    fontWeight: 400,
-  },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "#2c3e50",
-  },
-  "& .MuiOutlinedInput-input": {
-    padding: "18px 24px",
-    color: "#2c3e50",
-  },
-  "& .MuiFormHelperText-root": {
-    marginTop: "6px",
-    fontSize: "13px",
-    fontWeight: 500,
-    textShadow: "0 1px 2px rgba(0, 0, 0, 0.1)",
-  },
-  "& .MuiFormHelperText-root.Mui-error": {
-    color: "#f44336",
-  },
-});
-
-const FormCard = styled(Card)({
-  width: "100%",
-  maxWidth: "450px",
-  padding: "48px 40px",
-  background:
-    "linear-gradient(145deg, #667eea 0%,rgb(67, 20, 114) 50%,rgb(117, 137, 250) 100%)",
-  boxShadow: `
-    0 25px 50px rgba(102, 126, 234, 0.25),
-    0 10px 30px rgba(118, 75, 162, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2)
-  `,
-  border: "1px solid rgba(255, 255, 255, 0.3)",
-  backdropFilter: "blur(20px)",
-  animation: "slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
-  "&::before": {
-    background:
-      "linear-gradient(145deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 100%)",
-  },
-  "&::after": {
-    content: '""',
-    position: "absolute",
-    top: "-50%",
-    left: "-50%",
-    width: "200%",
-    height: "200%",
-    animation: "shimmer 3s ease-in-out infinite",
-    zIndex: -1,
-  },
-  "@keyframes slideInUp": {
-    from: {
-      opacity: 0,
-      transform: "translateY(30px)",
-    },
-    to: {
-      opacity: 1,
-      transform: "translateY(0)",
-    },
-  },
-  "@keyframes shimmer": {
-    "0%, 100%": {
-      transform: "rotate(0deg) scale(1)",
-      opacity: 0.3,
-    },
-    "50%": {
-      transform: "rotate(180deg) scale(1.1)",
-      opacity: 0.1,
-    },
-  },
-});
+import { StyledTextField, FormCard } from "../../StyledComponents";
 
 const SubmitButton = styled(Button)({
   padding: "18px 32px",
