@@ -9,9 +9,11 @@ import { Card } from "../../../shared/ui/Card";
 import { Grid } from "../../../shared/ui/Grid";
 import { UserChips } from "../../../shared/ui/UserChips";
 import Button from "../../../shared/ui/Button";
+import { useNavigate } from "react-router-dom";
 
 const MainPage = () => {
   const { isAuth, email, userData } = useAuth();
+  const navigate = useNavigate();
 
   if (!isAuth) {
     return (
@@ -184,8 +186,19 @@ const MainPage = () => {
           <Button variant="primary" size="large">
             🚀 Начать Собеседование
           </Button>
-          <Button variant="secondary" size="large">
+          <Button 
+            variant="secondary" 
+            size="large"
+            onClick={() => navigate("/study-plans")}
+          >
             📋 Мои Интервью
+          </Button>
+          <Button 
+            variant="secondary" 
+            size="large"
+            onClick={() => navigate("/study-plans")}
+          >
+            📚 Выбрать курс
           </Button>
           <Button variant="secondary" size="large">
             ⚙️ Настройки
