@@ -33,6 +33,7 @@ export const getAllStudyPlans = async (): Promise<StudyPlan[]> => {
       } as StudyPlan);
     });
     
+    console.log("Загружено учебных планов:", studyPlans.length);
     return studyPlans;
   } catch (error) {
     console.error("Ошибка при получении учебных планов:", error);

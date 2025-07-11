@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Typography, Box, Alert, IconButton } from "@mui/material";
+import { Typography, Box, Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Container } from "../../../shared/ui/Container";
 import { AppBar } from "../../../shared/ui/AppBar";
@@ -9,6 +9,7 @@ import { LoadingSpinner } from "../../../shared/ui/LoadingSpinner";
 import { StudyPlanCard } from "../../../shared/ui/StudyPlanCard";
 import { LogoutButton } from "../../../features/auth";
 import { UserChips } from "../../../shared/ui/UserChips";
+import { IconButton } from "../../../shared/ui/IconButton";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useStudyPlans } from "../../../features/studyPlans/hooks/useStudyPlans";
 import { StudyPlan } from "../../../shared/types/studyPlan";
@@ -51,15 +52,12 @@ const StudyPlansPage = () => {
           <Box display="flex" alignItems="center" gap={2}>
             <IconButton
               onClick={() => navigate("/")}
-              sx={{
-                color: "#ffffff",
-                backgroundColor: "rgba(255, 255, 255, 0.1)",
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                },
-              }}
             >
-              ← Назад
+              <Box display="flex" alignItems="center" gap={1}>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  ← Назад
+                </Typography>
+              </Box>
             </IconButton>
             <Typography
               variant="h5"
