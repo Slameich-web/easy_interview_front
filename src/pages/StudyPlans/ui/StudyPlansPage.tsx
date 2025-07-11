@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Typography, Box, Alert } from "@mui/material";
+import { Typography, Box, Alert, IconButton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { Container } from "../../../shared/ui/Container";
 import { AppBar } from "../../../shared/ui/AppBar";
 import { Toolbar } from "../../../shared/ui/Toolbar";
@@ -14,6 +15,7 @@ import { StudyPlan } from "../../../shared/types/studyPlan";
 import Button from "../../../shared/ui/Button";
 
 const StudyPlansPage = () => {
+  const navigate = useNavigate();
   const { email, userData } = useAuth();
   const { studyPlans, isLoading, error } = useStudyPlans();
   const [selectedPlan, setSelectedPlan] = useState<StudyPlan | null>(null);
@@ -46,17 +48,31 @@ const StudyPlansPage = () => {
     <Box sx={{ minHeight: "100vh" }}>
       <AppBar position="static">
         <Toolbar sx={{ justifyContent: "space-between", py: 1 }}>
-          <Typography
-            variant="h5"
-            sx={{
-              fontWeight: 800,
-              color: "#ffffff",
-              textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
-              letterSpacing: "0.5px",
-            }}
-          >
-            📚 Выбор курса
-          </Typography>
+          <Box display="flex" alignItems="center" gap={2}>
+            <IconButton
+              onClick={() => navigate("/")}
+              sx={{
+                color: "#ffffff",
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.2)",
+                },
+              }}
+            >
+              ← Назад
+            </IconButton>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 800,
+                color: "#ffffff",
+                textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
+                letterSpacing: "0.5px",
+              }}
+            >
+              📚 Выбор курса
+            </Typography>
+          </Box>
 
           <Box display="flex" alignItems="center" gap={2}>
             <UserChips email={email!} userData={userData} />
@@ -133,7 +149,7 @@ const StudyPlansPage = () => {
 
         <Grid container spacing={4}>
           {studyPlans.map((plan) => (
-            <Grid key={plan.id} xs={12} md={6} lg={4}>
+            <Grid key={plan.id} item xs={12} md={6} lg={4}>
               <StudyPlanCard
                 studyPlan={plan}
                 onSelect={handleSelectPlan}
