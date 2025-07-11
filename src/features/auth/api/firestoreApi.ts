@@ -1,10 +1,4 @@
-import { 
-  doc, 
-  setDoc, 
-  getDoc,
-  Timestamp,
-  serverTimestamp 
-} from "firebase/firestore";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { UserData } from "../../../shared/types/user";
 import { generateStudentId } from "../../../shared/utils/studentIdGenerator";
@@ -22,7 +16,7 @@ export const createUserInFirestore = async (
     // Проверяем, существует ли уже пользователь
     const userDocRef = doc(db, "users", uid);
     const userDoc = await getDoc(userDocRef);
-    
+
     if (userDoc.exists()) {
       console.log("Пользователь уже существует в Firestore");
       return;
@@ -30,7 +24,7 @@ export const createUserInFirestore = async (
 
     // Генерируем уникальный студенческий ID
     const studentId = await generateStudentId();
-    
+
     // Создаем данные пользователя
     const userData: UserData = {
       email,
@@ -43,7 +37,7 @@ export const createUserInFirestore = async (
 
     // Сохраняем пользователя с UID как ID документа
     await setDoc(userDocRef, userData);
-    
+
     console.log("Пользователь успешно создан в Firestore:", {
       uid,
       studentId,
@@ -60,21 +54,23 @@ export const createUserInFirestore = async (
 };
 
 // Получение данных пользователя из Firestore
-export const getUserFromFirestore = async (uid: string): Promise<UserData | null> => {
+export const getUserFromFirestore = async (
+  uid: string
+): Promise<UserData | null> => {
   try {
     const userDocRef = doc(db, "users", uid);
     const userDoc = await getDoc(userDocRef);
-    
+
     if (userDoc.exists()) {
       const data = userDoc.data();
-      
+
       // Преобразуем Firestore Timestamp в обычную дату для сериализации
       return {
         ...data,
         createdAt: data.createdAt?.toDate?.() || data.createdAt,
       } as UserData;
     }
-    
+
     return null;
   } catch (error) {
     console.error("Ошибка при получении пользователя из Firestore:", error);
@@ -89,12 +85,12 @@ export const getUserFromFirestore = async (uid: string): Promise<UserData | null
 // Обновление данных пользователя
 export const updateUserInFirestore = async (
   uid: string,
-  updates: Partial<Omit<UserData, 'createdAt'>>
+  updates: Partial<Omit<UserData, "createdAt">>
 ): Promise<void> => {
   try {
     const userDocRef = doc(db, "users", uid);
     await setDoc(userDocRef, updates, { merge: true });
-    
+
     console.log("Данные пользователя обновлены:", updates);
   } catch (error) {
     console.error("Ошибка при обновлении пользователя:", error);

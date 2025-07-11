@@ -16,7 +16,7 @@ setPersistence(auth, browserLocalPersistence);
 export const signIn = async ({
   email,
   password,
-}: Pick<AuthCredentials, 'email' | 'password'>): Promise<AuthResult> => {
+}: Pick<AuthCredentials, "email" | "password">): Promise<AuthResult> => {
   try {
     const result = await signInWithEmailAndPassword(auth, email, password);
     return { user: result.user };
@@ -36,10 +36,16 @@ export const signUp = async ({
 }: AuthCredentials): Promise<AuthResult> => {
   try {
     const result = await createUserWithEmailAndPassword(auth, email, password);
-    
+
     // Создаем пользователя в Firestore после успешной регистрации
-    await createUserInFirestore(result.user.uid, email, groupId, role, studentNumber);
-    
+    await createUserInFirestore(
+      result.user.uid,
+      email,
+      groupId,
+      role,
+      studentNumber
+    );
+
     return { user: result.user };
   } catch (error) {
     throw new Error(
