@@ -73,9 +73,9 @@ const StudyPlansPage = () => {
                 py: 1,
               }}
             >
-              <Typography 
-                variant="body2" 
-                sx={{ 
+              <Typography
+                variant="body2"
+                sx={{
                   fontWeight: 600,
                   display: "flex",
                   alignItems: "center",
@@ -85,7 +85,7 @@ const StudyPlansPage = () => {
                 ← Назад
               </Typography>
             </IconButton>
-            
+
             <Box
               sx={{
                 width: "2px",
@@ -94,7 +94,7 @@ const StudyPlansPage = () => {
                 borderRadius: "1px",
               }}
             />
-            
+
             <Typography
               variant="h5"
               sx={{
@@ -149,7 +149,7 @@ const StudyPlansPage = () => {
             Изучайте новые технологии и развивайте свои навыки с нашими
             структурированными курсами
           </Typography>
-          
+
           {/* Stats */}
           {studyPlans.length > 0 && (
             <Box
@@ -181,9 +181,9 @@ const StudyPlansPage = () => {
         {/* Error State */}
         {error && (
           <Box sx={{ mb: 4, maxWidth: "600px", mx: "auto" }}>
-            <Alert 
-              severity="error" 
-              sx={{ 
+            <Alert
+              severity="error"
+              sx={{
                 backgroundColor: "rgba(255, 255, 255, 0.95)",
                 borderRadius: "16px",
                 "& .MuiAlert-message": {
@@ -202,8 +202,8 @@ const StudyPlansPage = () => {
 
         {/* Empty State */}
         {studyPlans.length === 0 && !isLoading && !error && (
-          <Box 
-            textAlign="center" 
+          <Box
+            textAlign="center"
             py={{ xs: 6, md: 10 }}
             sx={{
               backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -231,8 +231,8 @@ const StudyPlansPage = () => {
                 lineHeight: 1.6,
               }}
             >
-              Скоро здесь появятся интересные курсы для изучения. 
-              Следите за обновлениями!
+              Скоро здесь появятся интересные курсы для изучения. Следите за
+              обновлениями!
             </Typography>
           </Box>
         )}
@@ -241,7 +241,7 @@ const StudyPlansPage = () => {
         {studyPlans.length > 0 && (
           <Grid container spacing={{ xs: 3, md: 4 }}>
             {studyPlans.map((plan) => (
-              <Grid key={plan.id} item xs={12} sm={6} lg={4}>
+              <Grid key={plan.id} spacing={{ xs: 12, sm: 6, lg: 4 }}>
                 <StudyPlanCard
                   studyPlan={plan}
                   onSelect={handleSelectPlan}
