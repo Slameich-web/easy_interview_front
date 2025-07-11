@@ -1,4 +1,4 @@
-import { Grid2 as MUIGrid, Grid2Props as GridProps } from "@mui/material";
+import { Grid as MUIGrid, GridProps } from "@mui/material";
 
 const Grid = (props: GridProps) => {
   return <MUIGrid {...props} />;

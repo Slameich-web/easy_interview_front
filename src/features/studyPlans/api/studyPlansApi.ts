@@ -1,14 +1,13 @@
-import { 
-  collection, 
-  getDocs, 
-  doc, 
+import {
+  collection,
+  getDocs,
+  doc,
   getDoc,
   addDoc,
   updateDoc,
   deleteDoc,
   query,
-  orderBy,
-  serverTimestamp 
+  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { StudyPlan, StudyPlanFormData } from "../../../shared/types/studyPlan";
@@ -19,9 +18,9 @@ const COLLECTION_NAME = "studyPlans";
 export const getAllStudyPlans = async (): Promise<StudyPlan[]> => {
   try {
     const studyPlansRef = collection(db, COLLECTION_NAME);
-    const q = query(studyPlansRef, orderBy("createdAt", "desc"));
+    const q = query(studyPlansRef);
     const querySnapshot = await getDocs(q);
-    
+
     const studyPlans: StudyPlan[] = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data();
@@ -32,7 +31,7 @@ export const getAllStudyPlans = async (): Promise<StudyPlan[]> => {
         updatedAt: data.updatedAt?.toDate?.() || data.updatedAt,
       } as StudyPlan);
     });
-    
+
     console.log("Загружено учебных планов:", studyPlans.length);
     return studyPlans;
   } catch (error) {
@@ -46,11 +45,13 @@ export const getAllStudyPlans = async (): Promise<StudyPlan[]> => {
 };
 
 // Получить учебный план по ID
-export const getStudyPlanById = async (id: string): Promise<StudyPlan | null> => {
+export const getStudyPlanById = async (
+  id: string
+): Promise<StudyPlan | null> => {
   try {
     const studyPlanRef = doc(db, COLLECTION_NAME, id);
     const studyPlanDoc = await getDoc(studyPlanRef);
-    
+
     if (studyPlanDoc.exists()) {
       const data = studyPlanDoc.data();
       return {
@@ -60,7 +61,7 @@ export const getStudyPlanById = async (id: string): Promise<StudyPlan | null> =>
         updatedAt: data.updatedAt?.toDate?.() || data.updatedAt,
       } as StudyPlan;
     }
-    
+
     return null;
   } catch (error) {
     console.error("Ошибка при получении учебного плана:", error);
@@ -73,16 +74,18 @@ export const getStudyPlanById = async (id: string): Promise<StudyPlan | null> =>
 };
 
 // Создать новый учебный план
-export const createStudyPlan = async (data: StudyPlanFormData): Promise<StudyPlan> => {
+export const createStudyPlan = async (
+  data: StudyPlanFormData
+): Promise<StudyPlan> => {
   try {
     const studyPlanData = {
       ...data,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
-    
+
     const docRef = await addDoc(collection(db, COLLECTION_NAME), studyPlanData);
-    
+
     // Для возврата используем текущую дату
     return {
       id: docRef.id,
@@ -102,7 +105,7 @@ export const createStudyPlan = async (data: StudyPlanFormData): Promise<StudyPla
 
 // Обновить учебный план
 export const updateStudyPlan = async (
-  id: string, 
+  id: string,
   data: Partial<StudyPlanFormData>
 ): Promise<void> => {
   try {
