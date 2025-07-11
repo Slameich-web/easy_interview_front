@@ -2,7 +2,8 @@ import {
   doc, 
   setDoc, 
   getDoc,
-  Timestamp 
+  Timestamp,
+  serverTimestamp 
 } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { UserData } from "../../../shared/types/user";
@@ -36,7 +37,7 @@ export const createUserInFirestore = async (
       studentId,
       studentNumber: studentNumber || undefined,
       groupId: groupId || DEFAULT_GROUP,
-      createdAt: Timestamp.now(),
+      createdAt: serverTimestamp(),
       role,
     };
 
@@ -65,7 +66,13 @@ export const getUserFromFirestore = async (uid: string): Promise<UserData | null
     const userDoc = await getDoc(userDocRef);
     
     if (userDoc.exists()) {
-      return userDoc.data() as UserData;
+      const data = userDoc.data();
+      
+      // Преобразуем Firestore Timestamp в обычную дату для сериализации
+      return {
+        ...data,
+        createdAt: data.createdAt?.toDate?.() || data.createdAt,
+      } as UserData;
     }
     
     return null;

@@ -8,8 +8,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ["auth/setUser"],
-        ignoredPaths: ["auth.token"],
+        ignoredActions: ["auth/setUser", "auth/setUserData"],
+        ignoredPaths: ["auth.token", "auth.userData.createdAt"],
       },
     }),
 });

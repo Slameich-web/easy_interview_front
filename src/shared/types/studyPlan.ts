@@ -3,8 +3,8 @@ export interface StudyPlan {
   name: string;
   description: string;
   topics: string[];
-  createdAt?: unknown; // Firestore Timestamp
-  updatedAt?: unknown; // Firestore Timestamp
+  createdAt?: Date | unknown; // Date object or Firestore Timestamp
+  updatedAt?: Date | unknown; // Date object or Firestore Timestamp
 }
 
 export interface StudyPlanFormData {

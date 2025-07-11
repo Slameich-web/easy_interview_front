@@ -8,7 +8,7 @@ import {
   deleteDoc,
   query,
   orderBy,
-  Timestamp 
+  serverTimestamp 
 } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { StudyPlan, StudyPlanFormData } from "../../../shared/types/studyPlan";
@@ -24,9 +24,12 @@ export const getAllStudyPlans = async (): Promise<StudyPlan[]> => {
     
     const studyPlans: StudyPlan[] = [];
     querySnapshot.forEach((doc) => {
+      const data = doc.data();
       studyPlans.push({
         id: doc.id,
-        ...doc.data()
+        ...data,
+        createdAt: data.createdAt?.toDate?.() || data.createdAt,
+        updatedAt: data.updatedAt?.toDate?.() || data.updatedAt,
       } as StudyPlan);
     });
     
@@ -48,9 +51,12 @@ export const getStudyPlanById = async (id: string): Promise<StudyPlan | null> =>
     const studyPlanDoc = await getDoc(studyPlanRef);
     
     if (studyPlanDoc.exists()) {
+      const data = studyPlanDoc.data();
       return {
         id: studyPlanDoc.id,
-        ...studyPlanDoc.data()
+        ...data,
+        createdAt: data.createdAt?.toDate?.() || data.createdAt,
+        updatedAt: data.updatedAt?.toDate?.() || data.updatedAt,
       } as StudyPlan;
     }
     
@@ -70,15 +76,18 @@ export const createStudyPlan = async (data: StudyPlanFormData): Promise<StudyPla
   try {
     const studyPlanData = {
       ...data,
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     };
     
     const docRef = await addDoc(collection(db, COLLECTION_NAME), studyPlanData);
     
+    // Для возврата используем текущую дату
     return {
       id: docRef.id,
-      ...studyPlanData,
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     } as StudyPlan;
   } catch (error) {
     console.error("Ошибка при создании учебного плана:", error);
@@ -99,7 +108,7 @@ export const updateStudyPlan = async (
     const studyPlanRef = doc(db, COLLECTION_NAME, id);
     await updateDoc(studyPlanRef, {
       ...data,
-      updatedAt: Timestamp.now(),
+      updatedAt: serverTimestamp(),
     });
   } catch (error) {
     console.error("Ошибка при обновлении учебного плана:", error);
