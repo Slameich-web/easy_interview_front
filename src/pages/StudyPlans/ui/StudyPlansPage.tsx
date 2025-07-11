@@ -35,37 +35,76 @@ const StudyPlansPage = () => {
   if (isLoading) {
     return (
       <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 3,
+        }}
       >
         <LoadingSpinner size={60} />
+        <Typography
+          variant="h6"
+          sx={{
+            color: "rgba(255, 255, 255, 0.8)",
+            textAlign: "center",
+            fontWeight: 500,
+          }}
+        >
+          Загружаем учебные планы...
+        </Typography>
       </Box>
     );
   }
 
   return (
-    <Box sx={{ minHeight: "100vh" }}>
-      <AppBar position="static">
-        <Toolbar sx={{ justifyContent: "space-between", py: 1 }}>
+    <Box sx={{ minHeight: "100vh", position: "relative" }}>
+      {/* Header */}
+      <AppBar position="static" elevation={0}>
+        <Toolbar sx={{ justifyContent: "space-between", py: 1.5 }}>
           <Box display="flex" alignItems="center" gap={2}>
             <IconButton
               onClick={() => navigate("/")}
+              sx={{
+                minWidth: "auto",
+                px: 2,
+                py: 1,
+              }}
             >
-              <Box display="flex" alignItems="center" gap={1}>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                  ← Назад
-                </Typography>
-              </Box>
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  fontWeight: 600,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                }}
+              >
+                ← Назад
+              </Typography>
             </IconButton>
+            
+            <Box
+              sx={{
+                width: "2px",
+                height: "24px",
+                backgroundColor: "rgba(255, 255, 255, 0.3)",
+                borderRadius: "1px",
+              }}
+            />
+            
             <Typography
               variant="h5"
               sx={{
-                fontWeight: 800,
+                fontWeight: 700,
                 color: "#ffffff",
                 textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
                 letterSpacing: "0.5px",
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
               }}
             >
               📚 Выбор курса
@@ -79,16 +118,18 @@ const StudyPlansPage = () => {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="lg" sx={{ py: 6 }}>
-        <Box textAlign="center" mb={6}>
+      <Container maxWidth="xl" sx={{ py: { xs: 4, md: 6 } }}>
+        {/* Hero Section */}
+        <Box textAlign="center" mb={{ xs: 4, md: 6 }}>
           <Typography
-            variant="h3"
+            variant="h2"
             sx={{
               fontWeight: 800,
               color: "#ffffff",
               mb: 2,
               textShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
-              fontSize: { xs: "2rem", md: "2.5rem" },
+              fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+              lineHeight: 1.2,
             }}
           >
             Выберите учебный план
@@ -97,39 +138,86 @@ const StudyPlansPage = () => {
             variant="h6"
             sx={{
               color: "rgba(255, 255, 255, 0.9)",
-              mb: 4,
-              maxWidth: "600px",
+              mb: 2,
+              maxWidth: "700px",
               mx: "auto",
               lineHeight: 1.6,
+              fontSize: { xs: "1rem", md: "1.25rem" },
+              fontWeight: 400,
             }}
           >
             Изучайте новые технологии и развивайте свои навыки с нашими
             структурированными курсами
           </Typography>
+          
+          {/* Stats */}
+          {studyPlans.length > 0 && (
+            <Box
+              sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 1,
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+                backdropFilter: "blur(10px)",
+                borderRadius: "20px",
+                px: 3,
+                py: 1,
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "rgba(255, 255, 255, 0.8)",
+                  fontWeight: 600,
+                }}
+              >
+                📊 Доступно курсов: {studyPlans.length}
+              </Typography>
+            </Box>
+          )}
         </Box>
 
+        {/* Error State */}
         {error && (
-          <Alert 
-            severity="error" 
-            sx={{ 
-              mb: 4,
-              backgroundColor: "rgba(255, 255, 255, 0.95)",
-              "& .MuiAlert-message": {
-                color: "#d32f2f",
-              },
-            }}
-          >
-            {error}
-          </Alert>
+          <Box sx={{ mb: 4, maxWidth: "600px", mx: "auto" }}>
+            <Alert 
+              severity="error" 
+              sx={{ 
+                backgroundColor: "rgba(255, 255, 255, 0.95)",
+                borderRadius: "16px",
+                "& .MuiAlert-message": {
+                  color: "#d32f2f",
+                  fontWeight: 500,
+                },
+                "& .MuiAlert-icon": {
+                  color: "#d32f2f",
+                },
+              }}
+            >
+              {error}
+            </Alert>
+          </Box>
         )}
 
-        {studyPlans.length === 0 && !isLoading && (
-          <Box textAlign="center" py={8}>
+        {/* Empty State */}
+        {studyPlans.length === 0 && !isLoading && !error && (
+          <Box 
+            textAlign="center" 
+            py={{ xs: 6, md: 10 }}
+            sx={{
+              backgroundColor: "rgba(255, 255, 255, 0.05)",
+              borderRadius: "24px",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              backdropFilter: "blur(10px)",
+            }}
+          >
             <Typography
-              variant="h5"
+              variant="h4"
               sx={{
                 color: "rgba(255, 255, 255, 0.7)",
                 mb: 2,
+                fontSize: { xs: "1.5rem", md: "2rem" },
               }}
             >
               📝 Учебные планы пока не добавлены
@@ -138,33 +226,52 @@ const StudyPlansPage = () => {
               variant="body1"
               sx={{
                 color: "rgba(255, 255, 255, 0.6)",
+                maxWidth: "400px",
+                mx: "auto",
+                lineHeight: 1.6,
               }}
             >
-              Скоро здесь появятся интересные курсы для изучения
+              Скоро здесь появятся интересные курсы для изучения. 
+              Следите за обновлениями!
             </Typography>
           </Box>
         )}
 
-        <Grid container spacing={4}>
-          {studyPlans.map((plan) => (
-            <Grid key={plan.id} item xs={12} md={6} lg={4}>
-              <StudyPlanCard
-                studyPlan={plan}
-                onSelect={handleSelectPlan}
-                isSelected={selectedPlan?.id === plan.id}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        {/* Courses Grid */}
+        {studyPlans.length > 0 && (
+          <Grid container spacing={{ xs: 3, md: 4 }}>
+            {studyPlans.map((plan) => (
+              <Grid key={plan.id} item xs={12} sm={6} lg={4}>
+                <StudyPlanCard
+                  studyPlan={plan}
+                  onSelect={handleSelectPlan}
+                  isSelected={selectedPlan?.id === plan.id}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        )}
 
+        {/* Floating Action Button */}
         {selectedPlan && (
           <Box
             sx={{
               position: "fixed",
-              bottom: 32,
+              bottom: { xs: 24, md: 32 },
               left: "50%",
               transform: "translateX(-50%)",
               zIndex: 1000,
+              animation: "slideInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              "@keyframes slideInUp": {
+                from: {
+                  opacity: 0,
+                  transform: "translateX(-50%) translateY(20px)",
+                },
+                to: {
+                  opacity: 1,
+                  transform: "translateX(-50%) translateY(0)",
+                },
+              },
             }}
           >
             <Button
@@ -172,10 +279,15 @@ const StudyPlansPage = () => {
               size="large"
               onClick={handleStartCourse}
               sx={{
-                px: 4,
-                py: 2,
-                fontSize: "1.1rem",
+                px: { xs: 3, md: 4 },
+                py: { xs: 1.5, md: 2 },
+                fontSize: { xs: "1rem", md: "1.1rem" },
+                fontWeight: 700,
                 boxShadow: "0 8px 32px rgba(255, 107, 107, 0.4)",
+                minWidth: { xs: "280px", md: "320px" },
+                "&:hover": {
+                  boxShadow: "0 12px 40px rgba(255, 107, 107, 0.5)",
+                },
               }}
             >
               🚀 Начать курс "{selectedPlan.name}"
