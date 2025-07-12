@@ -3,6 +3,7 @@ import { LoginPage } from "./pages/Login";
 import { RegisterPage } from "./pages/Register";
 import { MainPage } from "./pages/Main";
 import { StudyPlansPage } from "./pages/StudyPlans";
+import { CoursePage } from "./pages/Course";
 import styles from "./App.module.scss";
 import { useLayoutEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -81,6 +82,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<MainPage />} />
           <Route path="/study-plans" element={<StudyPlansPage />} />
+          <Route path="/course/:planId" element={<CoursePage />} />
           <Route path="/test" element={<div>TEST</div>} />
         </Route>
       </Routes>

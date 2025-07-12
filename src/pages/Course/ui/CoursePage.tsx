@@ -1,33 +1,40 @@
 import { useState } from "react";
 import { Typography, Box, Alert } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Container } from "../../../shared/ui/Container";
 import { AppBar } from "../../../shared/ui/AppBar";
 import { Toolbar } from "../../../shared/ui/Toolbar";
 import { Grid } from "../../../shared/ui/Grid";
 import { LoadingSpinner } from "../../../shared/ui/LoadingSpinner";
-import { StudyPlanCard } from "../../../shared/ui/StudyPlanCard";
+import { TopicCard } from "../../../shared/ui/TopicCard";
 import { LogoutButton } from "../../../features/auth";
 import { UserChips } from "../../../shared/ui/UserChips";
 import { IconButton } from "../../../shared/ui/IconButton";
 import { useAuth } from "../../../shared/hooks/useAuth";
-import { useStudyPlans } from "../../../features/studyPlans/hooks/useStudyPlans";
-import { StudyPlan } from "../../../shared/types/studyPlan";
+import { useTopics } from "../../../features/topics";
+import { useStudyPlans } from "../../../features/studyPlans";
+import { Topic } from "../../../shared/types/topic";
 import Button from "../../../shared/ui/Button";
 
-const StudyPlansPage = () => {
+const CoursePage = () => {
   const navigate = useNavigate();
+  const { planId } = useParams<{ planId: string }>();
   const { email, userData } = useAuth();
-  const { studyPlans, isLoading, error } = useStudyPlans();
-  const [selectedPlan, setSelectedPlan] = useState<StudyPlan | null>(null);
+  const { topics, isLoading: topicsLoading, error: topicsError } = useTopics(planId || "");
+  const { studyPlans, isLoading: plansLoading } = useStudyPlans();
+  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
-  const handleSelectPlan = (plan: StudyPlan) => {
-    setSelectedPlan(selectedPlan?.id === plan.id ? null : plan);
+  const currentPlan = studyPlans.find(plan => plan.id === planId);
+  const isLoading = topicsLoading || plansLoading;
+
+  const handleSelectTopic = (topic: Topic) => {
+    setSelectedTopic(selectedTopic?.id === topic.id ? null : topic);
   };
 
-  const handleStartCourse = () => {
-    if (selectedPlan) {
-      navigate(`/course/${selectedPlan.id}`);
+  const handleStartTopic = () => {
+    if (selectedTopic) {
+      // TODO: Навигация к изучению темы/вопросам
+      console.log("Начать изучение темы:", selectedTopic.name);
     }
   };
 
@@ -52,8 +59,40 @@ const StudyPlansPage = () => {
             fontWeight: 500,
           }}
         >
-          Загружаем учебные планы...
+          Загружаем темы курса...
         </Typography>
+      </Box>
+    );
+  }
+
+  if (!currentPlan) {
+    return (
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 3,
+        }}
+      >
+        <Typography
+          variant="h4"
+          sx={{
+            color: "#ffffff",
+            textAlign: "center",
+            fontWeight: 600,
+          }}
+        >
+          Курс не найден
+        </Typography>
+        <Button
+          variant="secondary"
+          onClick={() => navigate("/study-plans")}
+        >
+          Вернуться к курсам
+        </Button>
       </Box>
     );
   }
@@ -65,7 +104,7 @@ const StudyPlansPage = () => {
         <Toolbar sx={{ justifyContent: "space-between", py: 1.5 }}>
           <Box display="flex" alignItems="center" gap={2}>
             <IconButton
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/study-plans")}
               sx={{
                 minWidth: "auto",
                 px: 2,
@@ -104,9 +143,10 @@ const StudyPlansPage = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: 1,
+                fontSize: { xs: "1.1rem", md: "1.25rem" },
               }}
             >
-              📚 Выбор курса
+              📖 {currentPlan.name}
             </Typography>
           </Box>
 
@@ -131,13 +171,14 @@ const StudyPlansPage = () => {
               lineHeight: 1.2,
             }}
           >
-            Выберите учебный план
+            Темы курса
           </Typography>
+          
           <Typography
             variant="h6"
             sx={{
               color: "rgba(255, 255, 255, 0.9)",
-              mb: 2,
+              mb: 3,
               maxWidth: "700px",
               mx: "auto",
               lineHeight: 1.6,
@@ -145,40 +186,73 @@ const StudyPlansPage = () => {
               fontWeight: 400,
             }}
           >
-            Изучайте новые технологии и развивайте свои навыки с нашими
-            структурированными курсами
+            {currentPlan.description}
           </Typography>
 
           {/* Stats */}
-          {studyPlans.length > 0 && (
+          {topics.length > 0 && (
             <Box
               sx={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: 1,
-                backgroundColor: "rgba(255, 255, 255, 0.1)",
-                backdropFilter: "blur(10px)",
-                borderRadius: "20px",
-                px: 3,
-                py: 1,
-                border: "1px solid rgba(255, 255, 255, 0.2)",
+                gap: 2,
+                flexWrap: "wrap",
+                justifyContent: "center",
               }}
             >
-              <Typography
-                variant="body2"
+              <Box
                 sx={{
-                  color: "rgba(255, 255, 255, 0.8)",
-                  fontWeight: 600,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 1,
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "20px",
+                  px: 3,
+                  py: 1,
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
                 }}
               >
-                📊 Доступно курсов: {studyPlans.length}
-              </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.8)",
+                    fontWeight: 600,
+                  }}
+                >
+                  📚 Тем: {topics.length}
+                </Typography>
+              </Box>
+              
+              <Box
+                sx={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 1,
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "20px",
+                  px: 3,
+                  py: 1,
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.8)",
+                    fontWeight: 600,
+                  }}
+                >
+                  ❓ Всего вопросов: {topics.reduce((sum, topic) => sum + topic.questionsCount, 0)}
+                </Typography>
+              </Box>
             </Box>
           )}
         </Box>
 
         {/* Error State */}
-        {error && (
+        {topicsError && (
           <Box sx={{ mb: 4, maxWidth: "600px", mx: "auto" }}>
             <Alert
               severity="error"
@@ -194,13 +268,13 @@ const StudyPlansPage = () => {
                 },
               }}
             >
-              {error}
+              {topicsError}
             </Alert>
           </Box>
         )}
 
         {/* Empty State */}
-        {studyPlans.length === 0 && !isLoading && !error && (
+        {topics.length === 0 && !isLoading && !topicsError && (
           <Box
             textAlign="center"
             py={{ xs: 6, md: 10 }}
@@ -219,7 +293,7 @@ const StudyPlansPage = () => {
                 fontSize: { xs: "1.5rem", md: "2rem" },
               }}
             >
-              📝 Учебные планы пока не добавлены
+              📝 Темы для этого курса пока не добавлены
             </Typography>
             <Typography
               variant="body1"
@@ -230,21 +304,21 @@ const StudyPlansPage = () => {
                 lineHeight: 1.6,
               }}
             >
-              Скоро здесь появятся интересные курсы для изучения. Следите за
+              Скоро здесь появятся интересные темы для изучения. Следите за
               обновлениями!
             </Typography>
           </Box>
         )}
 
-        {/* Courses Grid */}
-        {studyPlans.length > 0 && (
+        {/* Topics Grid */}
+        {topics.length > 0 && (
           <Grid container spacing={{ xs: 3, md: 4 }}>
-            {studyPlans.map((plan) => (
-              <Grid key={plan.id} spacing={{ xs: 12, sm: 6, lg: 4 }}>
-                <StudyPlanCard
-                  studyPlan={plan}
-                  onSelect={handleSelectPlan}
-                  isSelected={selectedPlan?.id === plan.id}
+            {topics.map((topic) => (
+              <Grid key={topic.id} size={{ xs: 12, sm: 6, lg: 4 }}>
+                <TopicCard
+                  topic={topic}
+                  onSelect={handleSelectTopic}
+                  isSelected={selectedTopic?.id === topic.id}
                 />
               </Grid>
             ))}
@@ -252,7 +326,7 @@ const StudyPlansPage = () => {
         )}
 
         {/* Floating Action Button */}
-        {selectedPlan && (
+        {selectedTopic && (
           <Box
             sx={{
               position: "fixed",
@@ -276,7 +350,7 @@ const StudyPlansPage = () => {
             <Button
               variant="primary"
               size="large"
-              onClick={handleStartCourse}
+              onClick={handleStartTopic}
               sx={{
                 px: { xs: 3, md: 4 },
                 py: { xs: 1.5, md: 2 },
@@ -289,7 +363,7 @@ const StudyPlansPage = () => {
                 },
               }}
             >
-              🚀 Начать курс "{selectedPlan.name}"
+              🚀 Изучать "{selectedTopic.name}"
             </Button>
           </Box>
         )}
@@ -298,4 +372,4 @@ const StudyPlansPage = () => {
   );
 };
 
-export default StudyPlansPage;
+export default CoursePage;

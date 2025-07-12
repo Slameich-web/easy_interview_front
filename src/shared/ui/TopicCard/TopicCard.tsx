@@ -1,0 +1,174 @@
+import { Typography, Box, CardContent } from "@mui/material";
+import { Card } from "../Card";
+import { Topic } from "../../types/topic";
+import Button from "../Button";
+
+interface TopicCardProps {
+  topic: Topic;
+  onSelect: (topic: Topic) => void;
+  isSelected?: boolean;
+}
+
+export const TopicCard = ({ 
+  topic, 
+  onSelect, 
+  isSelected = false 
+}: TopicCardProps) => {
+  return (
+    <Card
+      sx={{
+        height: "100%",
+        cursor: "pointer",
+        transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+        border: isSelected 
+          ? "2px solid #4caf50" 
+          : "1px solid rgba(255, 255, 255, 0.2)",
+        transform: isSelected ? "scale(1.02)" : "scale(1)",
+        position: "relative",
+        overflow: "hidden",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: isSelected
+            ? "linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%)"
+            : "transparent",
+          transition: "all 0.3s ease",
+        },
+        "&:hover": {
+          transform: isSelected ? "scale(1.02)" : "translateY(-8px)",
+          borderColor: isSelected ? "#4caf50" : "rgba(255, 255, 255, 0.4)",
+          boxShadow: isSelected
+            ? "0 20px 40px rgba(76, 175, 80, 0.3)"
+            : "0 20px 40px rgba(0, 0, 0, 0.2)",
+          "&::before": {
+            background: isSelected
+              ? "linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(76, 175, 80, 0.08) 100%)"
+              : "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
+          },
+        },
+      }}
+    >
+      <CardContent 
+        sx={{ 
+          p: { xs: 2.5, md: 3 }, 
+          height: "100%", 
+          display: "flex", 
+          flexDirection: "column",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        <Box sx={{ flex: 1 }}>
+          {/* Header */}
+          <Box sx={{ mb: 2 }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 700,
+                color: "#ffffff",
+                mb: 1,
+                textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
+                fontSize: { xs: "1.25rem", md: "1.5rem" },
+                lineHeight: 1.3,
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+              }}
+            >
+              {topic.name}
+            </Typography>
+            
+            {isSelected && (
+              <Box
+                sx={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                  backgroundColor: "rgba(76, 175, 80, 0.2)",
+                  color: "#4caf50",
+                  px: 1.5,
+                  py: 0.5,
+                  borderRadius: "12px",
+                  fontSize: "0.75rem",
+                  fontWeight: 600,
+                  border: "1px solid rgba(76, 175, 80, 0.3)",
+                }}
+              >
+                ✓ Выбрано
+              </Box>
+            )}
+          </Box>
+
+          {/* Questions Count */}
+          <Box sx={{ mb: 3 }}>
+            <Box
+              sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 1,
+                backgroundColor: "rgba(255, 255, 255, 0.15)",
+                borderRadius: "16px",
+                px: 2,
+                py: 1,
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "rgba(255, 255, 255, 0.9)",
+                  fontWeight: 600,
+                  fontSize: "0.9rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                }}
+              >
+                ❓ {topic.questionsCount} {topic.questionsCount === 1 ? 'вопрос' : 
+                    topic.questionsCount < 5 ? 'вопроса' : 'вопросов'}
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Progress indicator */}
+          <Box sx={{ mb: 3 }}>
+            <Typography
+              variant="body2"
+              sx={{
+                color: "rgba(255, 255, 255, 0.7)",
+                fontSize: "0.85rem",
+                fontWeight: 500,
+                display: "flex",
+                alignItems: "center",
+                gap: 0.5,
+              }}
+            >
+              📊 Готов к изучению
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* Action Button */}
+        <Button
+          variant={isSelected ? "primary" : "secondary"}
+          fullWidth
+          onClick={() => onSelect(topic)}
+          sx={{ 
+            mt: "auto",
+            py: 1.5,
+            fontSize: { xs: "0.9rem", md: "1rem" },
+            fontWeight: 600,
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          }}
+        >
+          {isSelected ? "✓ Выбрано" : "Изучать тему"}
+        </Button>
+      </CardContent>
+    </Card>
+  );
+};
