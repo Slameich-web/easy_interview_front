@@ -101,7 +101,7 @@ const CoursePage = () => {
               onClick={() => navigate("/study-plans")}
               sx={{
                 minWidth: "auto",
-                px: 2,
+                px: { xs: 1, sm: 2 },
                 py: 1,
               }}
             >
@@ -112,6 +112,7 @@ const CoursePage = () => {
                   display: "flex",
                   alignItems: "center",
                   gap: 0.5,
+                  fontSize: { xs: "0.8rem", sm: "0.875rem" },
                 }}
               >
                 ← Назад
@@ -124,6 +125,7 @@ const CoursePage = () => {
                 height: "24px",
                 backgroundColor: "rgba(255, 255, 255, 0.3)",
                 borderRadius: "1px",
+                display: { xs: "none", sm: "block" },
               }}
             />
 
@@ -137,15 +139,17 @@ const CoursePage = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: 1,
-                fontSize: { xs: "1.1rem", md: "1.25rem" },
+                fontSize: { xs: "0.9rem", sm: "1rem", md: "1.25rem" },
               }}
             >
               📖 {currentPlan.name}
             </Typography>
           </Box>
 
-          <Box display="flex" alignItems="center" gap={2}>
-            <UserChips email={email!} userData={userData} />
+          <Box display="flex" alignItems="center" gap={{ xs: 1, sm: 2 }}>
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <UserChips email={email!} userData={userData} />
+            </Box>
             <LogoutButton />
           </Box>
         </Toolbar>

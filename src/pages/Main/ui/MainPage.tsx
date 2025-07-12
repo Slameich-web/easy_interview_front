@@ -67,13 +67,16 @@ const MainPage = () => {
               color: "#ffffff",
               textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
               letterSpacing: "0.5px",
+              fontSize: { xs: "1.1rem", sm: "1.25rem" },
             }}
           >
             Easy Interview
           </Typography>
 
           <Box display="flex" alignItems="center" gap={2}>
-            <UserChips email={email!} userData={userData} />
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <UserChips email={email!} userData={userData} />
+            </Box>
             <LogoutButton />
           </Box>
         </Toolbar>

@@ -29,14 +29,36 @@ export const LogoutButton = () => {
         {isLoggingOut ? (
           <>
             <LoadingSpinner size={16} />
-            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                fontWeight: 600,
+                display: { xs: "none", sm: "block" }
+              }}
+            >
               Выход...
             </Typography>
           </>
         ) : (
           <>
-            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                fontWeight: 600,
+                display: { xs: "none", sm: "block" }
+              }}
+            >
               🚪 Выйти
+            </Typography>
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                fontWeight: 600,
+                display: { xs: "block", sm: "none" },
+                fontSize: "1.2rem"
+              }}
+            >
+              🚪
             </Typography>
           </>
         )}
