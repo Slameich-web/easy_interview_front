@@ -7,24 +7,20 @@ import Button from "../Button";
 interface StudyPlanCardProps {
   studyPlan: StudyPlan;
   onSelect: (studyPlan: StudyPlan) => void;
-  isSelected?: boolean;
 }
 
 export const StudyPlanCard = ({ 
   studyPlan, 
-  onSelect, 
-  isSelected = false 
+  onSelect
 }: StudyPlanCardProps) => {
   return (
     <Card
+      onClick={() => onSelect(studyPlan)}
       sx={{
         height: "100%",
         cursor: "pointer",
         transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-        border: isSelected 
-          ? "2px solid #4caf50" 
-          : "1px solid rgba(255, 255, 255, 0.2)",
-        transform: isSelected ? "scale(1.02)" : "scale(1)",
+        border: "1px solid rgba(255, 255, 255, 0.2)",
         position: "relative",
         overflow: "hidden",
         "&::before": {
@@ -34,22 +30,19 @@ export const StudyPlanCard = ({
           left: 0,
           width: "100%",
           height: "100%",
-          background: isSelected
-            ? "linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%)"
-            : "transparent",
+          background: "transparent",
           transition: "all 0.3s ease",
         },
         "&:hover": {
-          transform: isSelected ? "scale(1.02)" : "translateY(-8px)",
-          borderColor: isSelected ? "#4caf50" : "rgba(255, 255, 255, 0.4)",
-          boxShadow: isSelected
-            ? "0 20px 40px rgba(76, 175, 80, 0.3)"
-            : "0 20px 40px rgba(0, 0, 0, 0.2)",
+          transform: "translateY(-8px) scale(1.02)",
+          borderColor: "rgba(255, 255, 255, 0.4)",
+          boxShadow: "0 20px 40px rgba(0, 0, 0, 0.2)",
           "&::before": {
-            background: isSelected
-              ? "linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(76, 175, 80, 0.08) 100%)"
-              : "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
+            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
           },
+        },
+        "&:active": {
+          transform: "translateY(-4px) scale(1.01)",
         },
       }}
     >
@@ -83,26 +76,6 @@ export const StudyPlanCard = ({
             >
               {studyPlan.name}
             </Typography>
-            
-            {isSelected && (
-              <Box
-                sx={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 0.5,
-                  backgroundColor: "rgba(76, 175, 80, 0.2)",
-                  color: "#4caf50",
-                  px: 1.5,
-                  py: 0.5,
-                  borderRadius: "12px",
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  border: "1px solid rgba(76, 175, 80, 0.3)",
-                }}
-              >
-                ✓ Выбрано
-              </Box>
-            )}
           </Box>
 
           {/* Description */}
@@ -178,14 +151,36 @@ export const StudyPlanCard = ({
         </Box>
 
         {/* Action Button */}
-        <Button
-          variant={isSelected ? "primary" : "secondary"}
-          fullWidth
-          onClick={() => onSelect(studyPlan)}
+        <Box
           sx={{ 
             mt: "auto",
-            py: 1.5,
-            fontSize: { xs: "0.9rem", md: "1rem" },
+            textAlign: "center",
+            py: 2,
+            borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+            backgroundColor: "rgba(255, 255, 255, 0.05)",
+            borderRadius: "0 0 20px 20px",
+            transition: "all 0.3s ease",
+          }}
+        >
+          <Typography
+            variant="body2"
+            sx={{
+              color: "rgba(255, 255, 255, 0.8)",
+              fontSize: "0.9rem",
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 1,
+            }}
+          >
+            🚀 Нажмите для изучения
+          </Typography>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
             fontWeight: 600,
             transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
           }}

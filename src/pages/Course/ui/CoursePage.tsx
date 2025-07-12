@@ -22,20 +22,14 @@ const CoursePage = () => {
   const { email, userData } = useAuth();
   const { topics, isLoading: topicsLoading, error: topicsError } = useTopics(planId || "");
   const { studyPlans, isLoading: plansLoading } = useStudyPlans();
-  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
   const currentPlan = studyPlans.find(plan => plan.id === planId);
   const isLoading = topicsLoading || plansLoading;
 
   const handleSelectTopic = (topic: Topic) => {
-    setSelectedTopic(selectedTopic?.id === topic.id ? null : topic);
-  };
-
-  const handleStartTopic = () => {
-    if (selectedTopic) {
-      // TODO: Навигация к изучению темы/вопросам
-      console.log("Начать изучение темы:", selectedTopic.name);
-    }
+    // TODO: Навигация к изучению темы/вопросам
+    console.log("Начать изучение темы:", topic.name);
+    // navigate(`/topic/${topic.id}/questions`);
   };
 
   if (isLoading) {
@@ -318,54 +312,10 @@ const CoursePage = () => {
                 <TopicCard
                   topic={topic}
                   onSelect={handleSelectTopic}
-                  isSelected={selectedTopic?.id === topic.id}
                 />
               </Grid>
             ))}
           </Grid>
-        )}
-
-        {/* Floating Action Button */}
-        {selectedTopic && (
-          <Box
-            sx={{
-              position: "fixed",
-              bottom: { xs: 24, md: 32 },
-              left: "50%",
-              transform: "translateX(-50%)",
-              zIndex: 1000,
-              animation: "slideInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-              "@keyframes slideInUp": {
-                from: {
-                  opacity: 0,
-                  transform: "translateX(-50%) translateY(20px)",
-                },
-                to: {
-                  opacity: 1,
-                  transform: "translateX(-50%) translateY(0)",
-                },
-              },
-            }}
-          >
-            <Button
-              variant="primary"
-              size="large"
-              onClick={handleStartTopic}
-              sx={{
-                px: { xs: 3, md: 4 },
-                py: { xs: 1.5, md: 2 },
-                fontSize: { xs: "1rem", md: "1.1rem" },
-                fontWeight: 700,
-                boxShadow: "0 8px 32px rgba(255, 107, 107, 0.4)",
-                minWidth: { xs: "280px", md: "320px" },
-                "&:hover": {
-                  boxShadow: "0 12px 40px rgba(255, 107, 107, 0.5)",
-                },
-              }}
-            >
-              🚀 Изучать "{selectedTopic.name}"
-            </Button>
-          </Box>
         )}
       </Container>
     </Box>

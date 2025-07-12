@@ -13,22 +13,14 @@ import { IconButton } from "../../../shared/ui/IconButton";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useStudyPlans } from "../../../features/studyPlans/hooks/useStudyPlans";
 import { StudyPlan } from "../../../shared/types/studyPlan";
-import Button from "../../../shared/ui/Button";
 
 const StudyPlansPage = () => {
   const navigate = useNavigate();
   const { email, userData } = useAuth();
   const { studyPlans, isLoading, error } = useStudyPlans();
-  const [selectedPlan, setSelectedPlan] = useState<StudyPlan | null>(null);
 
   const handleSelectPlan = (plan: StudyPlan) => {
-    setSelectedPlan(selectedPlan?.id === plan.id ? null : plan);
-  };
-
-  const handleStartCourse = () => {
-    if (selectedPlan) {
-      navigate(`/course/${selectedPlan.id}`);
-    }
+    navigate(`/course/${plan.id}`);
   };
 
   if (isLoading) {
@@ -244,54 +236,10 @@ const StudyPlansPage = () => {
                 <StudyPlanCard
                   studyPlan={plan}
                   onSelect={handleSelectPlan}
-                  isSelected={selectedPlan?.id === plan.id}
                 />
               </Grid>
             ))}
           </Grid>
-        )}
-
-        {/* Floating Action Button */}
-        {selectedPlan && (
-          <Box
-            sx={{
-              position: "fixed",
-              bottom: { xs: 24, md: 32 },
-              left: "50%",
-              transform: "translateX(-50%)",
-              zIndex: 1000,
-              animation: "slideInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-              "@keyframes slideInUp": {
-                from: {
-                  opacity: 0,
-                  transform: "translateX(-50%) translateY(20px)",
-                },
-                to: {
-                  opacity: 1,
-                  transform: "translateX(-50%) translateY(0)",
-                },
-              },
-            }}
-          >
-            <Button
-              variant="primary"
-              size="large"
-              onClick={handleStartCourse}
-              sx={{
-                px: { xs: 3, md: 4 },
-                py: { xs: 1.5, md: 2 },
-                fontSize: { xs: "1rem", md: "1.1rem" },
-                fontWeight: 700,
-                boxShadow: "0 8px 32px rgba(255, 107, 107, 0.4)",
-                minWidth: { xs: "280px", md: "320px" },
-                "&:hover": {
-                  boxShadow: "0 12px 40px rgba(255, 107, 107, 0.5)",
-                },
-              }}
-            >
-              🚀 Начать курс "{selectedPlan.name}"
-            </Button>
-          </Box>
         )}
       </Container>
     </Box>
