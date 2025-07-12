@@ -3,13 +3,11 @@ import { useAuth } from "../../../shared/hooks/useAuth";
 import { LogoutButton } from "../../../features/auth";
 import { LoadingSpinner } from "../../../shared/ui/LoadingSpinner";
 import { Container } from "../../../shared/ui/Container";
-import { AppBar } from "../../../shared/ui/AppBar";
-import { Toolbar } from "../../../shared/ui/Toolbar";
 import { Card } from "../../../shared/ui/Card";
 import { Grid } from "../../../shared/ui/Grid";
-import { UserChips } from "../../../shared/ui/UserChips";
 import Button from "../../../shared/ui/Button";
 import { useNavigate } from "react-router-dom";
+import { PageHeader } from "../../../shared/components";
 
 const MainPage = () => {
   const { isAuth, email, userData } = useAuth();
@@ -58,29 +56,10 @@ const MainPage = () => {
         },
       }}
     >
-      <AppBar position="static">
-        <Toolbar sx={{ justifyContent: "space-between", py: 1 }}>
-          <Typography
-            variant="h5"
-            sx={{
-              fontWeight: 800,
-              color: "#ffffff",
-              textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
-              letterSpacing: "0.5px",
-              fontSize: { xs: "1.1rem", sm: "1.25rem" },
-            }}
-          >
-            Easy Interview
-          </Typography>
-
-          <Box display="flex" alignItems="center" gap={2}>
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <UserChips email={email!} userData={userData} />
-            </Box>
-            <LogoutButton />
-          </Box>
-        </Toolbar>
-      </AppBar>
+      <PageHeader 
+        title="Easy Interview" 
+        showBackButton={false}
+      />
 
       <Container maxWidth="lg" sx={{ py: 8, position: "relative", zIndex: 2 }}>
         <Box textAlign="center" mb={8}>
