@@ -16,7 +16,9 @@ import { Question, QuestionFormData } from "../../../shared/types/question";
 const COLLECTION_NAME = "questions";
 
 // Получить все вопросы для конкретной темы
-export const getQuestionsByTopicId = async (topicId: string): Promise<Question[]> => {
+export const getQuestionsByTopicId = async (
+  topicId: string
+): Promise<Question[]> => {
   try {
     const questionsRef = collection(db, COLLECTION_NAME);
     const q = query(questionsRef, where("topicId", "==", topicId));
@@ -28,12 +30,10 @@ export const getQuestionsByTopicId = async (topicId: string): Promise<Question[]
       questions.push({
         id: doc.id,
         ...data,
-        createdAt: data.createdAt?.toDate?.() || data.createdAt,
-        updatedAt: data.updatedAt?.toDate?.() || data.updatedAt,
       } as Question);
     });
 
-    console.log(`Загружено вопросов для темы ${topicId}:`, questions.length);
+    console.log(`Загружено вопросов для темы ${topicId}:`, questions);
     return questions;
   } catch (error) {
     console.error("Ошибка при получении вопросов:", error);
@@ -102,7 +102,9 @@ export const getQuestionById = async (id: string): Promise<Question | null> => {
 };
 
 // Создать новый вопрос
-export const createQuestion = async (data: QuestionFormData): Promise<Question> => {
+export const createQuestion = async (
+  data: QuestionFormData
+): Promise<Question> => {
   try {
     const questionData = {
       ...data,
