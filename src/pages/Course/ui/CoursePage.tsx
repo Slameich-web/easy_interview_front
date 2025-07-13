@@ -1,5 +1,6 @@
 import { Alert } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Container } from "../../../shared/ui/Container";
 import { Grid } from "../../../shared/ui/Grid";
 import { TopicCard } from "../../../shared/ui/TopicCard";
@@ -25,8 +26,7 @@ const CoursePage = () => {
   const isLoading = topicsLoading || plansLoading;
 
   const handleSelectTopic = (topic: Topic) => {
-    console.log("Начать изучение темы:", topic.name);
-    // TODO: navigate(`/topic/${topic.id}/questions`);
+    navigate(`/topic/${topic.id}/questions`);
   };
 
   if (isLoading) {
