@@ -77,19 +77,23 @@ export const getAllTopics = async (): Promise<Topic[]> => {
 // Получить тему по ID
 export const getTopicById = async (id: string): Promise<Topic | null> => {
   try {
+    console.log("API: Получаем тему по ID:", id);
     const topicRef = doc(db, COLLECTION_NAME, id);
     const topicDoc = await getDoc(topicRef);
 
     if (topicDoc.exists()) {
       const data = topicDoc.data();
-      return {
+      const topic = {
         id: topicDoc.id,
         ...data,
         createdAt: data.createdAt?.toDate?.() || data.createdAt,
         updatedAt: data.updatedAt?.toDate?.() || data.updatedAt,
       } as Topic;
+      console.log("API: Найдена тема:", topic);
+      return topic;
     }
 
+    console.log("API: Тема не найдена");
     return null;
   } catch (error) {
     console.error("Ошибка при получении темы:", error);

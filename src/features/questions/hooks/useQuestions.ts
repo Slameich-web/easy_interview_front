@@ -8,13 +8,18 @@ export const useQuestions = (topicId: string) => {
   const [error, setError] = useState<string | null>(null);
 
   const loadQuestions = useCallback(async () => {
-    if (!topicId) return;
+    if (!topicId) {
+      setQuestions([]);
+      return;
+    }
     
+    console.log("Загружаем вопросы для темы:", topicId);
     setIsLoading(true);
     setError(null);
     
     try {
       const questionsData = await getQuestionsByTopicId(topicId);
+      console.log("Загружено вопросов:", questionsData.length);
       setQuestions(questionsData);
     } catch (error) {
       console.error("Ошибка при загрузке вопросов:", error);

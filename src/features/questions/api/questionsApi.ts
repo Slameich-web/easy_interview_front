@@ -20,6 +20,7 @@ export const getQuestionsByTopicId = async (
   topicId: string
 ): Promise<Question[]> => {
   try {
+    console.log("API: Получаем вопросы для темы:", topicId);
     const questionsRef = collection(db, COLLECTION_NAME);
     const q = query(questionsRef, where("topicId", "==", topicId));
     const querySnapshot = await getDocs(q);
@@ -30,10 +31,13 @@ export const getQuestionsByTopicId = async (
       questions.push({
         id: doc.id,
         ...data,
+        createdAt: data.createdAt?.toDate?.() || data.createdAt,
+        updatedAt: data.updatedAt?.toDate?.() || data.updatedAt,
       } as Question);
     });
 
-    console.log(`Загружено вопросов для темы ${topicId}:`, questions);
+    console.log(`API: Загружено вопросов для темы ${topicId}:`, questions.length);
+    console.log("Вопросы:", questions);
     return questions;
   } catch (error) {
     console.error("Ошибка при получении вопросов:", error);

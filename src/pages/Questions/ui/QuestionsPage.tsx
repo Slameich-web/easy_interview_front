@@ -4,8 +4,9 @@ import { Container } from "../../../shared/ui/Container";
 import { Grid } from "../../../shared/ui/Grid";
 import { QuestionCard } from "../../../shared/ui/QuestionCard";
 import { useQuestions } from "../../../features/questions";
-import { useTopics } from "../../../features/topics";
+import { getTopicById } from "../../../features/topics/api/topicsApi";
 import { Question } from "../../../shared/types/question";
+import { Topic } from "../../../shared/types/topic";
 import Button from "../../../shared/ui/Button";
 import { 
   PageHeader, 
@@ -14,15 +15,39 @@ import {
   LoadingState 
 } from "../../../shared/components";
 import { NotFoundContainer, NotFoundTitle } from "../../../shared/ui/StyledComponents";
+import { useState, useEffect } from "react";
 
 const QuestionsPage = () => {
   const navigate = useNavigate();
   const { topicId } = useParams<{ topicId: string }>();
   const { questions, isLoading: questionsLoading, error: questionsError } = useQuestions(topicId || "");
-  const { topics, isLoading: topicsLoading } = useTopics("");
+  
+  const [currentTopic, setCurrentTopic] = useState<Topic | null>(null);
+  const [topicLoading, setTopicLoading] = useState(false);
+  const [topicError, setTopicError] = useState<string | null>(null);
 
-  const currentTopic = topics.find(topic => topic.id === topicId);
-  const isLoading = questionsLoading || topicsLoading;
+  useEffect(() => {
+    const loadTopic = async () => {
+      if (!topicId) return;
+      
+      setTopicLoading(true);
+      setTopicError(null);
+      
+      try {
+        const topic = await getTopicById(topicId);
+        setCurrentTopic(topic);
+      } catch (error) {
+        console.error("Ошибка при загрузке темы:", error);
+        setTopicError(error instanceof Error ? error.message : "Произошла ошибка");
+      } finally {
+        setTopicLoading(false);
+      }
+    };
+
+    loadTopic();
+  }, [topicId]);
+
+  const isLoading = questionsLoading || topicLoading;
 
   const handleSelectQuestion = (question: Question) => {
     console.log("Отвечать на вопрос:", question.text);
@@ -33,12 +58,17 @@ const QuestionsPage = () => {
     return <LoadingState message="Загружаем вопросы..." />;
   }
 
-  if (!currentTopic) {
+  if (!currentTopic && !topicLoading) {
     return (
       <NotFoundContainer>
         <NotFoundTitle variant="h4">
-          Тема не найдена
+          {topicError ? "Ошибка загрузки темы" : "Тема не найдена"}
         </NotFoundTitle>
+        {topicError && (
+          <Alert severity="error" sx={{ mb: 2, maxWidth: "400px" }}>
+            {topicError}
+          </Alert>
+        )}
         <Button
           variant="secondary"
           onClick={() => navigate("/study-plans")}
@@ -47,6 +77,10 @@ const QuestionsPage = () => {
         </Button>
       </NotFoundContainer>
     );
+  }
+
+  if (!currentTopic) {
+    return <LoadingState message="Загружаем тему..." />;
   }
 
   const heroStats = questions.length > 0 ? [
