@@ -5,10 +5,9 @@ import { Question, DIFFICULTY_LABELS, DIFFICULTY_COLORS, DifficultyLevel } from 
 interface QuestionCardProps {
   question: Question;
   onSelect: (question: Question) => void;
-  questionNumber: number;
 }
 
-export const QuestionCard = ({ question, onSelect, questionNumber }: QuestionCardProps) => {
+export const QuestionCard = ({ question, onSelect }: QuestionCardProps) => {
   const difficultyColor = DIFFICULTY_COLORS[question.difficulty as DifficultyLevel] || '#757575';
   const difficultyLabel = DIFFICULTY_LABELS[question.difficulty as DifficultyLevel] || question.difficulty;
 
@@ -67,7 +66,7 @@ export const QuestionCard = ({ question, onSelect, questionNumber }: QuestionCar
               fontSize: { xs: "1rem", md: "1.1rem" },
             }}
           >
-            Вопрос #{questionNumber}
+            Вопрос #{question.queue}
           </Typography>
           
           <Chip

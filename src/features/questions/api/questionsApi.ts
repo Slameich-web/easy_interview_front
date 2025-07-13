@@ -8,6 +8,7 @@ import {
   deleteDoc,
   query,
   where,
+  orderBy,
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../../../firebase";
@@ -22,7 +23,11 @@ export const getQuestionsByTopicId = async (
   try {
     console.log("API: Получаем вопросы для темы:", topicId);
     const questionsRef = collection(db, COLLECTION_NAME);
-    const q = query(questionsRef, where("topicId", "==", topicId));
+    const q = query(
+      questionsRef, 
+      where("topicId", "==", topicId),
+      orderBy("queue", "asc")
+    );
     const querySnapshot = await getDocs(q);
 
     const questions: Question[] = [];
@@ -37,7 +42,7 @@ export const getQuestionsByTopicId = async (
     });
 
     console.log(`API: Загружено вопросов для темы ${topicId}:`, questions.length);
-    console.log("Вопросы:", questions);
+    console.log("Вопросы (отсортированы по queue):", questions.map(q => ({ id: q.id, queue: q.queue, text: q.text.substring(0, 50) + '...' })));
     return questions;
   } catch (error) {
     console.error("Ошибка при получении вопросов:", error);
@@ -53,7 +58,8 @@ export const getQuestionsByTopicId = async (
 export const getAllQuestions = async (): Promise<Question[]> => {
   try {
     const questionsRef = collection(db, COLLECTION_NAME);
-    const querySnapshot = await getDocs(questionsRef);
+    const q = query(questionsRef, orderBy("queue", "asc"));
+    const querySnapshot = await getDocs(q);
 
     const questions: Question[] = [];
     querySnapshot.forEach((doc) => {
@@ -66,7 +72,7 @@ export const getAllQuestions = async (): Promise<Question[]> => {
       } as Question);
     });
 
-    console.log("Загружено всех вопросов:", questions.length);
+    console.log("Загружено всех вопросов (отсортированы по queue):", questions.length);
     return questions;
   } catch (error) {
     console.error("Ошибка при получении всех вопросов:", error);

@@ -6,6 +6,7 @@ export interface Question {
   educationalMaterialsText: string;
   educationalMaterialsLinks: string[];
   topicId: string;
+  queue: number;
   createdAt?: Date | unknown;
   updatedAt?: Date | unknown;
 }
@@ -17,6 +18,7 @@ export interface QuestionFormData {
   educationalMaterialsText: string;
   educationalMaterialsLinks: string[];
   topicId: string;
+  queue: number;
 }
 
 export type DifficultyLevel = 'easy' | 'medium' | 'hard';

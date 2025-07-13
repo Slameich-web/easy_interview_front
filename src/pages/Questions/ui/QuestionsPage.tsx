@@ -137,11 +137,10 @@ const QuestionsPage = () => {
           />
         ) : (
           <Grid container spacing={{ xs: 3, md: 4 }}>
-            {questions.map((question, index) => (
+            {questions.map((question) => (
               <Grid key={question.id} size={{ xs: 12, sm: 6, lg: 4 }}>
                 <QuestionCard
                   question={question}
-                  questionNumber={index + 1}
                   onSelect={handleSelectQuestion}
                 />
               </Grid>
