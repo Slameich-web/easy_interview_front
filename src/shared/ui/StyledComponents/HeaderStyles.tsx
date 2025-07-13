@@ -13,6 +13,7 @@ export const HeaderDivider = styled(Box)(({ theme }) => ({
   backgroundColor: "rgba(255, 255, 255, 0.3)",
   borderRadius: "1px",
   display: "none",
+  marginLeft: "4px",
   [theme.breakpoints.up("sm")]: {
     display: "block",
   },
@@ -32,14 +33,6 @@ export const HeaderTitle = styled(Typography)(({ theme }) => ({
   },
   [theme.breakpoints.up("md")]: {
     fontSize: "1.25rem",
-  },
-}));
-
-export const BackButton = styled(Box)(({ theme }) => ({
-  minWidth: "auto",
-  padding: "4px 8px",
-  [theme.breakpoints.up("sm")]: {
-    padding: "8px 16px",
   },
 }));
 

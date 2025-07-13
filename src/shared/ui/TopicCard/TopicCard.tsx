@@ -1,17 +1,13 @@
 import { Typography, Box, CardContent } from "@mui/material";
 import { Card } from "../Card";
 import { Topic } from "../../types/topic";
-import Button from "../Button";
 
 interface TopicCardProps {
   topic: Topic;
   onSelect: (topic: Topic) => void;
 }
 
-export const TopicCard = ({ 
-  topic, 
-  onSelect
-}: TopicCardProps) => {
+export const TopicCard = ({ topic, onSelect }: TopicCardProps) => {
   return (
     <Card
       onClick={() => onSelect(topic)}
@@ -37,7 +33,8 @@ export const TopicCard = ({
           borderColor: "rgba(255, 255, 255, 0.4)",
           boxShadow: "0 20px 40px rgba(0, 0, 0, 0.2)",
           "&::before": {
-            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
+            background:
+              "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
           },
         },
         "&:active": {
@@ -45,11 +42,11 @@ export const TopicCard = ({
         },
       }}
     >
-      <CardContent 
-        sx={{ 
-          p: { xs: 2.5, md: 3 }, 
-          height: "100%", 
-          display: "flex", 
+      <CardContent
+        sx={{
+          p: { xs: 2.5, md: 3 },
+          height: "100%",
+          display: "flex",
           flexDirection: "column",
           position: "relative",
           zIndex: 1,
@@ -102,8 +99,12 @@ export const TopicCard = ({
                   gap: 0.5,
                 }}
               >
-                ❓ {topic.questionsCount} {topic.questionsCount === 1 ? 'вопрос' : 
-                    topic.questionsCount < 5 ? 'вопроса' : 'вопросов'}
+                ❓ {topic.questionsCount}{" "}
+                {topic.questionsCount === 1
+                  ? "вопрос"
+                  : topic.questionsCount < 5
+                    ? "вопроса"
+                    : "вопросов"}
               </Typography>
             </Box>
           </Box>
@@ -128,7 +129,7 @@ export const TopicCard = ({
 
         {/* Action Button */}
         <Box
-          sx={{ 
+          sx={{
             mt: "auto",
             textAlign: "center",
             py: 2,

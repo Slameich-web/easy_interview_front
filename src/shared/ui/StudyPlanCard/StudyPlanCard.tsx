@@ -2,17 +2,13 @@ import { Typography, Box, CardContent } from "@mui/material";
 import { Card } from "../Card";
 import { StudyPlan } from "../../types/studyPlan";
 import { Chip } from "../Chip";
-import Button from "../Button";
 
 interface StudyPlanCardProps {
   studyPlan: StudyPlan;
   onSelect: (studyPlan: StudyPlan) => void;
 }
 
-export const StudyPlanCard = ({ 
-  studyPlan, 
-  onSelect
-}: StudyPlanCardProps) => {
+export const StudyPlanCard = ({ studyPlan, onSelect }: StudyPlanCardProps) => {
   return (
     <Card
       onClick={() => onSelect(studyPlan)}
@@ -38,7 +34,8 @@ export const StudyPlanCard = ({
           borderColor: "rgba(255, 255, 255, 0.4)",
           boxShadow: "0 20px 40px rgba(0, 0, 0, 0.2)",
           "&::before": {
-            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
+            background:
+              "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
           },
         },
         "&:active": {
@@ -46,11 +43,11 @@ export const StudyPlanCard = ({
         },
       }}
     >
-      <CardContent 
-        sx={{ 
-          p: { xs: 2.5, md: 3 }, 
-          height: "100%", 
-          display: "flex", 
+      <CardContent
+        sx={{
+          p: { xs: 2.5, md: 3 },
+          height: "100%",
+          display: "flex",
           flexDirection: "column",
           position: "relative",
           zIndex: 1,
@@ -111,7 +108,7 @@ export const StudyPlanCard = ({
             >
               📚 Темы курса ({studyPlan.topics.length}):
             </Typography>
-            
+
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
               {studyPlan.topics.slice(0, 5).map((topic, index) => (
                 <Chip
@@ -131,7 +128,7 @@ export const StudyPlanCard = ({
                   }}
                 />
               ))}
-              
+
               {studyPlan.topics.length > 5 && (
                 <Chip
                   label={`+${studyPlan.topics.length - 5}`}
@@ -152,7 +149,7 @@ export const StudyPlanCard = ({
 
         {/* Action Button */}
         <Box
-          sx={{ 
+          sx={{
             mt: "auto",
             textAlign: "center",
             py: 2,

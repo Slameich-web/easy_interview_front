@@ -1,6 +1,5 @@
 import { Typography, Box, CardContent } from "@mui/material";
 import { useAuth } from "../../../shared/hooks/useAuth";
-import { LogoutButton } from "../../../features/auth";
 import { LoadingSpinner } from "../../../shared/ui/LoadingSpinner";
 import { Container } from "../../../shared/ui/Container";
 import { Card } from "../../../shared/ui/Card";
@@ -10,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { PageHeader } from "../../../shared/components";
 
 const MainPage = () => {
-  const { isAuth, email, userData } = useAuth();
+  const { isAuth } = useAuth();
   const navigate = useNavigate();
 
   if (!isAuth) {
@@ -56,10 +55,7 @@ const MainPage = () => {
         },
       }}
     >
-      <PageHeader 
-        title="Easy Interview" 
-        showBackButton={false}
-      />
+      <PageHeader title="Easy Interview" showBackButton={false} />
 
       <Container maxWidth="lg" sx={{ py: 8, position: "relative", zIndex: 2 }}>
         <Box textAlign="center" mb={8}>
@@ -168,15 +164,15 @@ const MainPage = () => {
           <Button variant="primary" size="large">
             🚀 Начать Собеседование
           </Button>
-          <Button 
-            variant="secondary" 
+          <Button
+            variant="secondary"
             size="large"
             onClick={() => navigate("/study-plans")}
           >
             📋 Мои Интервью
           </Button>
-          <Button 
-            variant="secondary" 
+          <Button
+            variant="secondary"
             size="large"
             onClick={() => navigate("/study-plans")}
           >

@@ -9,7 +9,6 @@ import {
   HeaderContainer,
   HeaderDivider,
   HeaderTitle,
-  BackButton,
   BackButtonText,
   UserActionsContainer,
   UserChipsContainer,
@@ -41,13 +40,20 @@ export const PageHeader = ({
         <HeaderContainer>
           {showBackButton && (
             <>
-              <IconButton onClick={handleBackClick} sx={BackButton}>
+              <IconButton
+                onClick={handleBackClick}
+                sx={{
+                  minWidth: "auto",
+                  px: { xs: 1, sm: 2 },
+                  py: 1,
+                }}
+              >
                 <BackButtonText>← Назад</BackButtonText>
               </IconButton>
               <HeaderDivider />
             </>
           )}
-          
+
           <HeaderTitle variant="h5">
             {icon && <span>{icon}</span>}
             {title}
