@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { 
-  Typography, 
-  Box, 
-  Alert, 
+import {
+  Typography,
+  Box,
+  Alert,
   Chip,
-  Divider,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Paper
+  Paper,
 } from "@mui/material";
 import { Container } from "../../../shared/ui/Container";
 import { Card } from "../../../shared/ui/Card";
@@ -18,21 +17,23 @@ import Button from "../../../shared/ui/Button";
 import { getQuestionById } from "../../../features/questions/api/questionsApi";
 import { getTopicById } from "../../../features/topics/api/topicsApi";
 import { useProgress } from "../../../features/progress";
-import { Question, DIFFICULTY_LABELS, DIFFICULTY_COLORS, DifficultyLevel } from "../../../shared/types/question";
+import {
+  Question,
+  DIFFICULTY_LABELS,
+  DIFFICULTY_COLORS,
+  DifficultyLevel,
+} from "../../../shared/types/question";
 import { Topic } from "../../../shared/types/topic";
-import { 
-  PageHeader, 
-  LoadingState 
-} from "../../../shared/components";
-import { 
-  NotFoundContainer, 
-  NotFoundTitle 
+import { PageHeader, LoadingState } from "../../../shared/components";
+import {
+  NotFoundContainer,
+  NotFoundTitle,
 } from "../../../shared/ui/StyledComponents";
 
 const QuestionStudyPage = () => {
   const navigate = useNavigate();
   const { questionId } = useParams<{ questionId: string }>();
-  
+
   const [question, setQuestion] = useState<Question | null>(null);
   const [topic, setTopic] = useState<Topic | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +41,12 @@ const QuestionStudyPage = () => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [userAnswer, setUserAnswer] = useState<boolean | null>(null);
 
-  const { progress, submitAnswer, getAnswerForQuestion } = useProgress(topic?.id || "");
+  const {
+    progress,
+    submitAnswer,
+    getAnswerForQuestion,
+    resetQuestionProgress,
+  } = useProgress(topic?.id || "");
 
   useEffect(() => {
     const loadQuestionAndTopic = async () => {
@@ -52,7 +58,7 @@ const QuestionStudyPage = () => {
       try {
         console.log("Загружаем вопрос:", questionId);
         const questionData = await getQuestionById(questionId);
-        
+
         if (!questionData) {
           setError("Вопрос не найден");
           return;
@@ -64,7 +70,10 @@ const QuestionStudyPage = () => {
         const topicData = await getTopicById(questionData.topicId);
         setTopic(topicData);
 
-        console.log("Загружены данные:", { question: questionData, topic: topicData });
+        console.log("Загружены данные:", {
+          question: questionData,
+          topic: topicData,
+        });
       } catch (error) {
         console.error("Ошибка при загрузке:", error);
         setError(error instanceof Error ? error.message : "Произошла ошибка");
@@ -99,7 +108,22 @@ const QuestionStudyPage = () => {
       // Можно показать уведомление об ошибке
     }
   };
+  const handleResetQuestionProgress = async () => {
+    if (!question || !topic) return;
 
+    try {
+      await resetQuestionProgress(question.id);
+      // Опционально: сбросить локальное состояние
+      setUserAnswer(null);
+      setShowAnswer(false);
+
+      // Можно добавить уведомление об успешном сбросе
+      console.log("Прогресс по вопросу сброшен");
+    } catch (error) {
+      console.error("Ошибка при сбросе прогресса:", error);
+      // Можно показать уведомление об ошибке
+    }
+  };
   const handleBackToQuestions = () => {
     if (topic) {
       navigate(`/topic/${topic.id}/questions`);
@@ -123,21 +147,31 @@ const QuestionStudyPage = () => {
     );
   }
 
-  const difficultyColor = DIFFICULTY_COLORS[question.difficulty as DifficultyLevel] || '#757575';
-  const difficultyLabel = DIFFICULTY_LABELS[question.difficulty as DifficultyLevel] || question.difficulty;
+  const difficultyColor =
+    DIFFICULTY_COLORS[question.difficulty as DifficultyLevel] || "#757575";
+  const difficultyLabel =
+    DIFFICULTY_LABELS[question.difficulty as DifficultyLevel] ||
+    question.difficulty;
 
   return (
     <>
-      <PageHeader 
+      <PageHeader
         title={`Вопрос #${question.queue}`}
-        icon="💡" 
+        icon="💡"
         backTo={`/topic/${topic.id}/questions`}
       />
 
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
         {/* Основная информация о вопросе */}
         <Card sx={{ mb: 4, p: { xs: 3, md: 4 } }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 3 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              mb: 3,
+            }}
+          >
             <Typography
               variant="h4"
               sx={{
@@ -150,7 +184,7 @@ const QuestionStudyPage = () => {
             >
               Вопрос #{question.queue}
             </Typography>
-            
+
             <Chip
               label={difficultyLabel}
               sx={{
@@ -174,58 +208,11 @@ const QuestionStudyPage = () => {
           >
             {question.text}
           </Typography>
-
-          <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.2)", mb: 3 }} />
-
-          {/* Кнопки для ответа */}
-          {!showAnswer && (
-            <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap" }}>
-              <Button
-                variant="primary"
-                size="large"
-                onClick={() => handleAnswerSubmit(true)}
-                sx={{ minWidth: "200px" }}
-              >
-                ✅ Знаю ответ
-              </Button>
-              <Button
-                variant="secondary"
-                size="large"
-                onClick={() => handleAnswerSubmit(false)}
-                sx={{ minWidth: "200px" }}
-              >
-                ❌ Не знаю
-              </Button>
-            </Box>
-          )}
-
-          {/* Результат ответа */}
-          {showAnswer && userAnswer !== null && (
-            <Alert
-              severity={userAnswer ? "success" : "info"}
-              sx={{
-                backgroundColor: userAnswer 
-                  ? "rgba(76, 175, 80, 0.2)" 
-                  : "rgba(33, 150, 243, 0.2)",
-                borderRadius: "16px",
-                "& .MuiAlert-message": {
-                  color: "#ffffff",
-                  fontWeight: 500,
-                },
-                "& .MuiAlert-icon": {
-                  color: "#ffffff",
-                },
-              }}
-            >
-              {userAnswer 
-                ? "Отлично! Вы знали ответ на этот вопрос." 
-                : "Не беспокойтесь! Изучите материалы ниже и попробуйте еще раз."}
-            </Alert>
-          )}
         </Card>
 
         {/* Обучающие материалы */}
-        {(question.educationalMaterialsText || question.educationalMaterialsLinks.length > 0) && (
+        {(question.educationalMaterialsText ||
+          question.educationalMaterialsLinks.length > 0) && (
           <Card sx={{ mb: 4, p: { xs: 3, md: 4 } }}>
             <Typography
               variant="h5"
@@ -277,7 +264,7 @@ const QuestionStudyPage = () => {
                 >
                   🔗 Полезные ссылки:
                 </Typography>
-                
+
                 <List>
                   {question.educationalMaterialsLinks.map((link, index) => (
                     <ListItem
@@ -317,7 +304,60 @@ const QuestionStudyPage = () => {
             )}
           </Card>
         )}
+        <Card sx={{ mb: 4, p: { xs: 3, md: 4 } }}>
+          {/* Кнопки для ответа */}
+          {!showAnswer && (
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              <Button
+                variant="primary"
+                size="large"
+                onClick={() => handleAnswerSubmit(true)}
+                sx={{ minWidth: "200px" }}
+              >
+                ✅ Знаю ответ
+              </Button>
+              <Button
+                variant="secondary"
+                size="large"
+                onClick={() => handleAnswerSubmit(false)}
+                sx={{ minWidth: "200px" }}
+              >
+                ❌ Не знаю
+              </Button>
+            </Box>
+          )}
 
+          {/* Результат ответа */}
+          {showAnswer && userAnswer !== null && (
+            <Alert
+              severity={userAnswer ? "success" : "info"}
+              sx={{
+                backgroundColor: userAnswer
+                  ? "rgba(76, 175, 80, 0.2)"
+                  : "rgba(33, 150, 243, 0.2)",
+                borderRadius: "16px",
+                "& .MuiAlert-message": {
+                  color: "#ffffff",
+                  fontWeight: 500,
+                },
+                "& .MuiAlert-icon": {
+                  color: "#ffffff",
+                },
+              }}
+            >
+              {userAnswer
+                ? "Отлично! Вы знали ответ на этот вопрос."
+                : "Не беспокойтесь! Изучите материалы ниже и попробуйте еще раз."}
+            </Alert>
+          )}
+        </Card>
         {/* Эталонный ответ */}
         {showAnswer && question.modelAnswer && (
           <Card sx={{ mb: 4, p: { xs: 3, md: 4 } }}>
@@ -385,10 +425,16 @@ const QuestionStudyPage = () => {
                   textAlign: "center",
                 }}
               >
-                <Typography variant="h4" sx={{ color: "#4caf50", fontWeight: 700 }}>
+                <Typography
+                  variant="h4"
+                  sx={{ color: "#4caf50", fontWeight: 700 }}
+                >
                   {progress.score}%
                 </Typography>
-                <Typography variant="body2" sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+                >
                   Общий счет
                 </Typography>
               </Box>
@@ -402,10 +448,16 @@ const QuestionStudyPage = () => {
                   textAlign: "center",
                 }}
               >
-                <Typography variant="h4" sx={{ color: "#2196f3", fontWeight: 700 }}>
+                <Typography
+                  variant="h4"
+                  sx={{ color: "#2196f3", fontWeight: 700 }}
+                >
                   {Object.keys(progress.answers).length}
                 </Typography>
-                <Typography variant="body2" sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+                >
                   Отвечено
                 </Typography>
               </Box>
@@ -419,10 +471,19 @@ const QuestionStudyPage = () => {
                   textAlign: "center",
                 }}
               >
-                <Typography variant="h4" sx={{ color: "#ff9800", fontWeight: 700 }}>
-                  {Object.values(progress.answers).filter(a => a.isCorrect).length}
+                <Typography
+                  variant="h4"
+                  sx={{ color: "#ff9800", fontWeight: 700 }}
+                >
+                  {
+                    Object.values(progress.answers).filter((a) => a.isCorrect)
+                      .length
+                  }
                 </Typography>
-                <Typography variant="body2" sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+                >
                   Правильно
                 </Typography>
               </Box>
@@ -438,6 +499,13 @@ const QuestionStudyPage = () => {
             onClick={handleBackToQuestions}
           >
             ← Вернуться к вопросам
+          </Button>
+          <Button
+            variant="secondary"
+            size="large"
+            onClick={handleResetQuestionProgress}
+          >
+            Сбросить прогресс
           </Button>
         </Box>
       </Container>

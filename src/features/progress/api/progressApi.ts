@@ -2,15 +2,13 @@ import {
   collection,
   getDocs,
   doc,
-  getDoc,
   setDoc,
-  updateDoc,
   query,
   where,
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../../../firebase";
-import { Progress, ProgressFormData, Answer } from "../../../shared/types/progress";
+import { Progress, Answer } from "../../../shared/types/progress";
 
 const COLLECTION_NAME = "progress";
 
@@ -20,8 +18,13 @@ export const getProgressByUserAndTopic = async (
   topicId: string
 ): Promise<Progress | null> => {
   try {
-    console.log("API: Получаем прогресс для пользователя:", userId, "тема:", topicId);
-    
+    console.log(
+      "API: Получаем прогресс для пользователя:",
+      userId,
+      "тема:",
+      topicId
+    );
+
     const progressRef = collection(db, COLLECTION_NAME);
     const q = query(
       progressRef,
@@ -40,7 +43,7 @@ export const getProgressByUserAndTopic = async (
         createdAt: data.createdAt?.toDate?.() || data.createdAt,
         updatedAt: data.updatedAt?.toDate?.() || data.updatedAt,
       } as Progress;
-      
+
       console.log("API: Найден прогресс:", progress);
       return progress;
     }
@@ -62,27 +65,45 @@ export const upsertProgress = async (
   userId: string,
   topicId: string,
   studentId: string,
-  newAnswer: Answer,
-  currentScore: number
+  newAnswer: Answer | null, // Может быть null при сбросе
+  currentScore: number,
+  questionIdToRemove?: string // Новый параметр для удаления вопроса
 ): Promise<void> => {
   try {
-    console.log("API: Обновляем прогресс:", { userId, topicId, newAnswer, currentScore });
+    console.log("API: Обновляем прогресс:", {
+      userId,
+      topicId,
+      newAnswer,
+      currentScore,
+      questionIdToRemove,
+    });
 
     // Получаем существующий прогресс
     const existingProgress = await getProgressByUserAndTopic(userId, topicId);
-    
+
     let updatedAnswers: Record<string, Answer> = {};
     let progressId: string;
 
     if (existingProgress) {
-      // Обновляем существующий прогресс
-      updatedAnswers = {
-        ...existingProgress.answers,
-        [newAnswer.questionId]: newAnswer,
-      };
+      // Копируем существующие ответы
+      updatedAnswers = { ...existingProgress.answers };
+
+      // Удаляем вопрос, если нужно
+      if (questionIdToRemove && updatedAnswers[questionIdToRemove]) {
+        delete updatedAnswers[questionIdToRemove];
+      }
+
+      // Добавляем новый ответ (если он есть)
+      if (newAnswer) {
+        updatedAnswers[newAnswer.questionId] = newAnswer;
+      }
+
       progressId = existingProgress.id;
     } else {
-      // Создаем новый прогресс
+      // Создаем новый прогресс только если есть новый ответ
+      if (!newAnswer) {
+        throw new Error("Нельзя создать пустой прогресс");
+      }
       updatedAnswers = {
         [newAnswer.questionId]: newAnswer,
       };
@@ -114,8 +135,58 @@ export const upsertProgress = async (
   }
 };
 
+// Новая функция: сбросить прогресс по конкретному вопросу
+export const resetQuestionProgress = async (
+  userId: string,
+  topicId: string,
+  studentId: string,
+  questionId: string
+): Promise<void> => {
+  try {
+    console.log("API: Сбрасываем прогресс по вопросу:", questionId);
+
+    // Получаем текущий прогресс
+    const existingProgress = await getProgressByUserAndTopic(userId, topicId);
+    if (!existingProgress || !existingProgress.answers[questionId]) {
+      console.log("Прогресс по вопросу не найден, ничего сбрасывать не нужно");
+      return;
+    }
+
+    // Удаляем вопрос и пересчитываем счет
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { [questionId]: _, ...remainingAnswers } = existingProgress.answers;
+    const correctAnswers = Object.values(remainingAnswers).filter(
+      (a) => a.isCorrect
+    ).length;
+    const totalAnswers = Object.keys(remainingAnswers).length;
+    const newScore =
+      totalAnswers > 0 ? Math.round((correctAnswers / totalAnswers) * 100) : 0;
+
+    // Обновляем с null вместо нового ответа и указанием вопроса для удаления
+    await upsertProgress(
+      userId,
+      topicId,
+      studentId,
+      null,
+      newScore,
+      questionId
+    );
+
+    console.log("API: Прогресс по вопросу успешно сброшен");
+  } catch (error) {
+    console.error("Ошибка при сбросе прогресса по вопросу:", error);
+    throw new Error(
+      `Ошибка сброса прогресса: ${
+        error instanceof Error ? error.message : "Неизвестная ошибка"
+      }`
+    );
+  }
+};
+
 // Получить все прогрессы пользователя
-export const getAllProgressByUser = async (userId: string): Promise<Progress[]> => {
+export const getAllProgressByUser = async (
+  userId: string
+): Promise<Progress[]> => {
   try {
     const progressRef = collection(db, COLLECTION_NAME);
     const q = query(progressRef, where("userId", "==", userId));
