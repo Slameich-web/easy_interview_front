@@ -50,8 +50,7 @@ const QuestionsPage = () => {
   const isLoading = questionsLoading || topicLoading;
 
   const handleSelectQuestion = (question: Question) => {
-    console.log("Отвечать на вопрос:", question.text);
-    // TODO: navigate(`/question/${question.id}/answer`);
+    navigate(`/question/${question.id}/study`);
   };
 
   if (isLoading) {

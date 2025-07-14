@@ -5,6 +5,7 @@ import { MainPage } from "./pages/Main";
 import { StudyPlansPage } from "./pages/StudyPlans";
 import { CoursePage } from "./pages/Course";
 import { QuestionsPage } from "./pages/Questions";
+import { QuestionStudyPage } from "./pages/QuestionStudy";
 import styles from "./App.module.scss";
 import { useLayoutEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -85,6 +86,7 @@ function App() {
           <Route path="/study-plans" element={<StudyPlansPage />} />
           <Route path="/course/:planId" element={<CoursePage />} />
           <Route path="/topic/:topicId/questions" element={<QuestionsPage />} />
+          <Route path="/question/:questionId/study" element={<QuestionStudyPage />} />
           <Route path="/test" element={<div>TEST</div>} />
         </Route>
       </Routes>

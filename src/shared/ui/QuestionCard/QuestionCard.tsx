@@ -4,16 +4,22 @@ import { Question, DIFFICULTY_LABELS, DIFFICULTY_COLORS, DifficultyLevel } from 
 
 interface QuestionCardProps {
   question: Question;
-  onSelect: (question: Question) => void;
+  onSelect?: (question: Question) => void;
 }
 
 export const QuestionCard = ({ question, onSelect }: QuestionCardProps) => {
+  const handleClick = () => {
+    if (onSelect) {
+      onSelect(question);
+    }
+  };
+
   const difficultyColor = DIFFICULTY_COLORS[question.difficulty as DifficultyLevel] || '#757575';
   const difficultyLabel = DIFFICULTY_LABELS[question.difficulty as DifficultyLevel] || question.difficulty;
 
   return (
     <Card
-      onClick={() => onSelect(question)}
+      onClick={handleClick}
       sx={{
         height: "100%",
         cursor: "pointer",
