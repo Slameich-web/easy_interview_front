@@ -5,6 +5,7 @@ export interface UserData {
   groupId: string;
   createdAt: Date | unknown; // Date object or Firestore Timestamp
   role?: "student" | "teacher";
+  lastLogin?: Date | unknown;
 }
 
 export interface AuthCredentials {

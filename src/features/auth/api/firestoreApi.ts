@@ -1,75 +1,55 @@
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { UserData } from "../../../shared/types/user";
-import { generateStudentId } from "../../../shared/utils/studentIdGenerator";
-import { DEFAULT_GROUP } from "../../../shared/constants/groups";
-import { Progress } from "../../../shared/types/progress";
+import { User } from "firebase/auth";
 
-// Создание пользователя в Firestore
 export const createUserInFirestore = async (
-  uid: string,
+  user: User,
+  groupId: string = "default_group",
   email: string,
-  groupId?: string,
   role: "student" | "teacher" = "student",
   studentNumber?: string
 ): Promise<void> => {
   try {
-    // Проверяем, существует ли уже пользователь
-    const userDocRef = doc(db, "users", uid);
-    const userDoc = await getDoc(userDocRef);
-
-    if (userDoc.exists()) {
-      console.log("Пользователь уже существует в Firestore");
-      return;
+    // Валидация входных данных
+    console.log("user----------", groupId);
+    if (!user || !user.uid) {
+      throw new Error("Invalid user object");
     }
 
-    // Генерируем уникальный студенческий ID
-    const studentId = await generateStudentId();
-
-    // Создаем данные пользователя
+    // Подготовка данных пользователя
     const userData: UserData = {
-      email,
-      studentId,
-      studentNumber: studentNumber || undefined,
-      groupId: groupId || DEFAULT_GROUP,
-      createdAt: serverTimestamp(),
+      email: email || "",
+      studentId: user.uid,
+      studentNumber: studentNumber || "",
+      groupId,
       role,
+      createdAt: serverTimestamp(),
+      lastLogin: serverTimestamp(),
     };
 
-    // Сохраняем пользователя с UID как ID документа
-    await setDoc(userDocRef, userData);
-    // Создаем начальный прогресс для пользователя
+    // Создаём документ пользователя
+    await setDoc(doc(db, "users", user.uid), userData);
+
+    // Для студентов создаём начальный прогресс
     if (role === "student") {
-      const initialProgress: Progress = {
-        id: `${uid}_default`,
+      const progressData = {
+        userId: user.uid,
         answers: {},
         score: 0,
-        lastPractice: null,
-        studentId,
-        userId: uid,
-        topicId: "default_topic", // Или другой начальный topicId
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
+        groupId, // Добавляем groupId в прогресс
       };
 
-      const progressRef = doc(db, "progress", initialProgress.id);
-      await setDoc(progressRef, initialProgress);
+      await setDoc(doc(db, "progress", `progress_${user.uid}`), progressData);
     }
 
-    console.log(
-      "Пользователь и начальный прогресс успешно созданы в Firestore:",
-      {
-        uid,
-        studentId,
-        email,
-      }
-    );
+    console.log("User document successfully created!");
   } catch (error) {
-    console.error("Ошибка при создании пользователя в Firestore:", error);
+    console.error("Error in createUserInFirestore:", error);
     throw new Error(
-      `Ошибка создания профиля пользователя: ${
-        error instanceof Error ? error.message : "Неизвестная ошибка"
-      }`
+      `Failed to create user: ${error instanceof Error ? error.message : String(error)}`
     );
   }
 };

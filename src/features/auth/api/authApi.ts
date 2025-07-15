@@ -39,9 +39,9 @@ export const signUp = async ({
 
     // Создаем пользователя в Firestore после успешной регистрации
     await createUserInFirestore(
-      result.user.uid,
-      email,
+      result.user,
       groupId,
+      email,
       role,
       studentNumber
     );
