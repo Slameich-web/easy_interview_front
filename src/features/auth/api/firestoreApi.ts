@@ -3,6 +3,7 @@ import { db } from "../../../firebase";
 import { UserData } from "../../../shared/types/user";
 import { generateStudentId } from "../../../shared/utils/studentIdGenerator";
 import { DEFAULT_GROUP } from "../../../shared/constants/groups";
+import { Progress } from "../../../shared/types/progress";
 
 // Создание пользователя в Firestore
 export const createUserInFirestore = async (
@@ -37,12 +38,32 @@ export const createUserInFirestore = async (
 
     // Сохраняем пользователя с UID как ID документа
     await setDoc(userDocRef, userData);
+    // Создаем начальный прогресс для пользователя
+    if (role === "student") {
+      const initialProgress: Progress = {
+        id: `${uid}_default`,
+        answers: {},
+        score: 0,
+        lastPractice: null,
+        studentId,
+        userId: uid,
+        topicId: "default_topic", // Или другой начальный topicId
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      };
 
-    console.log("Пользователь успешно создан в Firestore:", {
-      uid,
-      studentId,
-      email,
-    });
+      const progressRef = doc(db, "progress", initialProgress.id);
+      await setDoc(progressRef, initialProgress);
+    }
+
+    console.log(
+      "Пользователь и начальный прогресс успешно созданы в Firestore:",
+      {
+        uid,
+        studentId,
+        email,
+      }
+    );
   } catch (error) {
     console.error("Ошибка при создании пользователя в Firestore:", error);
     throw new Error(
