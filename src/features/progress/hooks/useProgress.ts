@@ -39,7 +39,11 @@ export const useProgress = (topicId: string) => {
 
   const submitAnswer = useCallback(
     async (questionId: string, isCorrect: boolean) => {
-      if (!userId || !topicId || !userData?.studentId) {
+      console.log("userId---", userId);
+      console.log("topicId---", topicId);
+      console.log("userData?.studentId---", userData?.studentId);
+
+      if (!userId || !topicId) {
         throw new Error("Недостаточно данных для сохранения ответа");
       }
 
@@ -63,7 +67,7 @@ export const useProgress = (topicId: string) => {
         await upsertProgress(
           userId,
           topicId,
-          userData.studentId,
+          userData?.studentId || userId,
           newAnswer,
           newScore
         );
@@ -74,7 +78,7 @@ export const useProgress = (topicId: string) => {
           answers: updatedAnswers,
           lastPractice: new Date(),
           score: newScore,
-          studentId: userData.studentId,
+          studentId: userData?.studentId || userId,
           topicId,
           userId,
           createdAt: prev?.createdAt || new Date(),

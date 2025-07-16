@@ -12,10 +12,10 @@ export const UserChips = ({ email, userData }: UserChipsProps) => {
   return (
     <Box display="flex" alignItems="center" gap={1}>
       <Chip label={email} />
-      {userData && (
+      {userData?.studentNumber && (
         <Box display="flex" alignItems="center" gap={1}>
           <Chip
-            label={`👨‍🎓 ${userData.studentId}`}
+            label={`👨‍🎓 ${userData.studentNumber}`}
             sx={{
               backgroundColor: "rgba(76, 175, 80, 0.2)",
               borderColor: "rgba(76, 175, 80, 0.5)",
