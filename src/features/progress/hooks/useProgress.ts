@@ -39,10 +39,6 @@ export const useProgress = (topicId: string) => {
 
   const submitAnswer = useCallback(
     async (questionId: string, isCorrect: boolean) => {
-      console.log("userId---", userId);
-      console.log("topicId---", topicId);
-      console.log("userData?.studentId---", userData?.studentId);
-
       if (!userId || !topicId) {
         throw new Error("Недостаточно данных для сохранения ответа");
       }
